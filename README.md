@@ -14,7 +14,8 @@ build.py              # generator: run `python3 build.py` from the repo root
 content/posts/*.html  # one article per file (metadata header + HTML body)
 assets/style.css      # styles; brand palette #3f2df0 / #1bdec8 / #3c4b5c
 assets/favicon.svg
-assets/avatar.svg
+assets/alexander-caldwell.jpg     # author photo (400x400) + -sm.jpg (192x192)
+assets/og-image.jpg               # social sharing card (1200x630)
 
 index.html            # generated: home page
 about/  blog/         # generated: bio page, all-articles page

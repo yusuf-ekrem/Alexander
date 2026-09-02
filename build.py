@@ -6,7 +6,7 @@ No third-party dependencies. Run `python3 build.py` from the repository root.
 Inputs
   content/posts/*.html   one file per article: a small metadata header, a line
                          containing only `---`, then the article body as HTML.
-  assets/                copied as-is (style.css, favicon.svg, avatar.svg).
+  assets/                copied as-is (style.css, favicon.svg, photos, og-image.jpg).
 
 Outputs (written next to this file)
   index.html, 404.html, sitemap.xml, robots.txt
@@ -36,6 +36,9 @@ SITE_DESCRIPTION = (
 )
 AUTHOR_NAME = "Alexander Caldwell"
 AUTHOR_TITLE = "Financial Expert"
+AUTHOR_PHOTO = "/assets/alexander-caldwell.jpg"       # 400x400
+AUTHOR_PHOTO_SM = "/assets/alexander-caldwell-sm.jpg" # 192x192, for small avatars
+OG_IMAGE = "/assets/og-image.jpg"                     # 1200x630
 AUTHOR_BIO_SHORT = (
     "Financial expert specializing in payroll management, with over 12 years of "
     "experience helping businesses and employees keep their financial records accurate."
@@ -295,7 +298,12 @@ def page(
   <meta property="og:title" content="{esc(full_title)}">
   <meta property="og:description" content="{esc(description)}">
   <meta property="og:site_name" content="{esc(SITE_NAME)}">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="{url(OG_IMAGE)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Portrait of {esc(AUTHOR_NAME)} with the site name and tagline">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{url(OG_IMAGE)}">
   <meta name="twitter:site" content="@alexandercaldw">
   <meta name="theme-color" content="#3f2df0">{ld}
 </head>
@@ -317,7 +325,7 @@ def person_ld() -> dict:
         "jobTitle": AUTHOR_TITLE,
         "description": AUTHOR_BIO_SHORT,
         "url": url("/about/"),
-        "image": url("/assets/avatar.svg"),
+        "image": url(AUTHOR_PHOTO),
         "alumniOf": {"@type": "CollegeOrUniversity", "name": "University of California, Berkeley"},
         "worksFor": {"@type": "Organization", "name": "Online Pay Stub"},
         "sameAs": [href for _, href in SOCIAL],
@@ -332,6 +340,7 @@ def website_ld() -> dict:
         "name": SITE_NAME,
         "description": SITE_DESCRIPTION,
         "inLanguage": "en",
+        "image": url(OG_IMAGE),
         "publisher": {"@id": url("/#person")},
     }
 
@@ -393,7 +402,7 @@ def category_grid(posts: list[Post]) -> str:
 
 def author_box() -> str:
     return f"""      <aside class="author-box" aria-label="About the author">
-        <img class="avatar" src="/assets/avatar.svg" width="72" height="72" alt="Illustration of {esc(AUTHOR_NAME)}">
+        <img class="avatar" src="{AUTHOR_PHOTO_SM}" width="72" height="72" alt="Portrait of {esc(AUTHOR_NAME)}" loading="lazy">
         <div>
           <p class="author-name">{esc(AUTHOR_NAME)}</p>
           <p class="author-title">{esc(AUTHOR_TITLE)}</p>
@@ -430,7 +439,7 @@ def build_home(posts: list[Post]) -> str:
           </div>
         </div>
         <div class="hero-card">
-          <img class="avatar avatar-lg" src="/assets/avatar.svg" width="96" height="96" alt="Illustration of {esc(AUTHOR_NAME)}">
+          <img class="avatar avatar-lg" src="{AUTHOR_PHOTO}" width="96" height="96" alt="Portrait of {esc(AUTHOR_NAME)}">
           <p class="author-name">{esc(AUTHOR_NAME)}</p>
           <p class="author-title">{esc(AUTHOR_TITLE)} &middot; 12+ years in payroll</p>
           <p class="muted">B.S. Finance, UC Berkeley. Helping businesses of all sizes run accurate, compliant payroll.</p>
@@ -471,7 +480,7 @@ def build_about() -> str:
 {breadcrumbs([("Home", "/"), ("About", "/about/")])}
       <article class="prose">
         <header class="page-head">
-          <img class="avatar avatar-lg" src="/assets/avatar.svg" width="96" height="96" alt="Illustration of {esc(AUTHOR_NAME)}">
+          <img class="avatar avatar-lg" src="{AUTHOR_PHOTO}" width="96" height="96" alt="Portrait of {esc(AUTHOR_NAME)}">
           <h1>{esc(AUTHOR_NAME)}</h1>
           <p class="lead">{esc(AUTHOR_TITLE)}</p>
         </header>
@@ -565,7 +574,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
           <h1>{esc(p.title)}</h1>
           <p class="lead">{esc(p.description)}</p>
           <div class="post-meta">
-            <img class="avatar avatar-sm" src="/assets/avatar.svg" width="36" height="36" alt="">
+            <img class="avatar avatar-sm" src="{AUTHOR_PHOTO_SM}" width="36" height="36" alt="">
             <span>By <a href="/about/">{esc(AUTHOR_NAME)}</a></span>
             <span aria-hidden="true">&middot;</span>
             <time datetime="{p.date.isoformat()}">{fmt_date(p.date)}</time>
