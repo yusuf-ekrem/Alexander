@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://alexandercaldwell.com/tax/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -99,6 +99,24 @@
   <url>
     <loc>https://alexandercaldwell.com/1099-forms/1099-pay-stub-for-contractors/</loc>
     <lastmod>2026-08-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/how-much-is-the-child-tax-credit/</loc>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/change-direct-deposit-information-with-irs/</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/california-exit-tax-explained/</loc>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
