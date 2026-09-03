@@ -44,7 +44,7 @@
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paycheck/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-08-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -135,6 +135,18 @@
   <url>
     <loc>https://alexandercaldwell.com/finance/employee-goal-setting-worksheet/</loc>
     <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paycheck/how-much-tax-is-taken-out-of-a-minors-paycheck/</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paycheck/why-was-no-federal-income-tax-withheld/</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
