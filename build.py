@@ -72,15 +72,80 @@ AUTHOR_BIO = [
 
 # Menu order is the order of this list.
 CATEGORIES = [
-    ("paystubs", "Paystubs", "How to read, check and keep your pay stubs."),
-    ("payroll", "Payroll", "Running payroll correctly, on time and in compliance."),
-    ("tax", "Tax", "Withholding, filing and the taxes that touch your paycheck."),
-    ("finance", "Finance", "Budgeting, saving and planning around your income."),
-    ("paycheck", "Paycheck", "Gross pay, net pay and everything in between."),
-    ("w-2-form", "W-2 Form", "Understanding and using your annual wage statement."),
-    ("1099-forms", "1099 Forms", "Independent contractor income and the forms behind it."),
+    (
+        "paystubs",
+        "Paystubs",
+        "How to read, check and keep your pay stubs.",
+        "A pay stub is the clearest record you have of how a paycheck was calculated. These guides "
+        "walk through the anatomy of a statement section by section: the pay period and identifying "
+        "details, the earnings that make up gross pay, the pre-tax and post-tax deductions, the "
+        "payroll taxes, and the year-to-date columns that eventually become your W-2. You will also "
+        "find practical checks that take five minutes on payday and catch the errors that otherwise "
+        "go unnoticed for months.",
+    ),
+    (
+        "payroll",
+        "Payroll",
+        "Running payroll correctly, on time and in compliance.",
+        "Payroll is where employment law, tax rules and accounting meet, and the penalties for "
+        "getting it wrong arrive quickly. This section covers the full cycle for employers: "
+        "registering for federal and state accounts, collecting the right paperwork from new hires, "
+        "classifying workers correctly, choosing a pay schedule, calculating and depositing "
+        "withheld taxes, and filing the quarterly and annual returns that keep the business "
+        "compliant.",
+    ),
+    (
+        "tax",
+        "Tax",
+        "Withholding, filing and the taxes that touch your paycheck.",
+        "Most people meet the tax system through payroll withholding rather than a tax return. "
+        "These articles explain how the federal income tax on your paycheck is estimated, how Form "
+        "W-4 shapes that estimate, how Social Security and Medicare differ from income tax, and how "
+        "bonuses and commissions are treated. The aim is a withholding position that leaves you "
+        "with neither a surprise bill nor an interest-free loan to the IRS.",
+    ),
+    (
+        "finance",
+        "Finance",
+        "Budgeting, saving and planning around your income.",
+        "Personal finance advice usually starts from salary; real budgets start from the amount "
+        "that actually reaches your account. This section takes a payroll-first view of household "
+        "money: building a budget on net pay, recognising the saving and spending decisions your "
+        "pay stub already makes for you, automating contributions through payroll, and planning for "
+        "the irregular costs that arrive every year without ever being budgeted.",
+    ),
+    (
+        "paycheck",
+        "Paycheck",
+        "Gross pay, net pay and everything in between.",
+        "The distance between what you earn and what you are paid surprises almost every new hire. "
+        "These guides follow a paycheck from gross to net with worked examples, explain the order "
+        "in which deductions and taxes are applied, and show why two people with identical salaries "
+        "can take home very different amounts depending on their state, filing status, benefit "
+        "elections and retirement contributions.",
+    ),
+    (
+        "w-2-form",
+        "W-2 Form",
+        "Understanding and using your annual wage statement.",
+        "Form W-2 is the document the IRS matches against your tax return, which makes it worth "
+        "understanding rather than simply forwarding to a preparer. This section explains every box "
+        "in plain English, covers why Boxes 1, 3 and 5 rarely agree, decodes the Box 12 letters, "
+        "shows how to reconcile the form against your final pay stub, and sets out what to do when "
+        "a W-2 arrives wrong or never arrives at all.",
+    ),
+    (
+        "1099-forms",
+        "1099 Forms",
+        "Independent contractor income and the forms behind it.",
+        "Freelance and contract income is reported on a family of 1099 forms, and the rules changed "
+        "when nonemployee compensation moved to its own form. These articles clarify which form "
+        "applies to which payment, what businesses must issue and when, what contractors should do "
+        "when one arrives, and how self-employment tax, quarterly estimates and deductible expenses "
+        "change the arithmetic compared with a W-2 paycheck.",
+    ),
 ]
-CATEGORY_BY_SLUG = {slug: (name, desc) for slug, name, desc in CATEGORIES}
+CATEGORY_BY_SLUG = {slug: (name, desc, intro) for slug, name, desc, intro in CATEGORIES}
 
 SOCIAL = [
     ("X", "https://x.com/alexandercaldw"),
@@ -172,6 +237,7 @@ class Post:
         self.category = meta["category"]
         self.date = dt.date.fromisoformat(meta["date"])
         self.description = meta["description"]
+        self.summary = meta.get("summary", [])
         self.body = body.strip()
         self.minutes = reading_time(self.body)
 
@@ -193,9 +259,14 @@ def load_posts() -> list[Post]:
         head, body = raw.split("\n---\n", 1)
         meta: dict[str, str] = {}
         for line in head.splitlines():
-            if ":" in line:
-                key, value = line.split(":", 1)
-                meta[key.strip().lower()] = value.strip()
+            if ":" not in line:
+                continue
+            key, value = line.split(":", 1)
+            key, value = key.strip().lower(), value.strip()
+            if key == "summary":
+                meta.setdefault("summary", []).append(value)
+            else:
+                meta[key] = value
         posts.append(Post(meta, body, source))
     seen: set[str] = set()
     for p in posts:
@@ -212,7 +283,7 @@ def load_posts() -> list[Post]:
 
 def nav_links(current: str) -> str:
     items = [("/", "Home"), ("/about/", "About")]
-    items += [(f"/{slug}/", name) for slug, name, _ in CATEGORIES]
+    items += [(f"/{slug}/", name) for slug, name, *_ in CATEGORIES]
     out = []
     for href, label in items:
         active = ' aria-current="page"' if href == current else ""
@@ -238,25 +309,14 @@ def social_links(with_icons: bool = True) -> str:
 
 def brand(extra_class: str = "") -> str:
     cls = f"brand {extra_class}".strip()
-    return f"""<a href="/" class="{cls}" aria-label="{esc(SITE_NAME)} home">
+    return f"""<a href="/" class="{cls}">
         <span class="brand-mark" aria-hidden="true">AC</span>
-        <span class="brand-text">
-          <span class="brand-name">{esc(SITE_NAME)}</span>
-          <span class="brand-tag">{esc(TAGLINE)}</span>
-        </span>
+        <span class="brand-name">{esc(SITE_NAME)}</span>
       </a>"""
 
 
 def header(current: str) -> str:
     return f"""  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="topbar">
-    <div class="container topbar-inner">
-      <span class="topbar-tagline">Independent guidance on pay stubs, payroll and paycheck taxes</span>
-      <div class="topbar-social" aria-label="Social profiles">
-          {social_links()}
-      </div>
-    </div>
-  </div>
   <header class="site-header">
     <div class="container header-inner">
       {brand()}
@@ -274,7 +334,7 @@ def header(current: str) -> str:
 
 def footer() -> str:
     cat_links = "\n            ".join(
-        f'<li><a href="/{slug}/">{esc(name)}</a></li>' for slug, name, _ in CATEGORIES
+        f'<li><a href="/{slug}/">{esc(name)}</a></li>' for slug, name, *_ in CATEGORIES
     )
     return f"""  <footer class="site-footer">
     <div class="container">
@@ -451,11 +511,11 @@ def post_grid(posts: list[Post], heading: str = "h3") -> str:
 
 
 def category_grid(posts: list[Post]) -> str:
-    counts = {slug: 0 for slug, _, _ in CATEGORIES}
+    counts = {slug: 0 for slug, *_ in CATEGORIES}
     for p in posts:
         counts[p.category] += 1
     tiles = []
-    for slug, name, desc in CATEGORIES:
+    for slug, name, desc, _ in CATEGORIES:
         n = counts[slug]
         label = f"{n} article" if n == 1 else f"{n} articles"
         tiles.append(
@@ -615,7 +675,7 @@ def build_about() -> str:
         <h2>What you will find here</h2>
         <p>This blog collects the questions Alexander hears most often from employees, freelancers and business owners, answered in plain English. Every article is organised under one of seven topics:</p>
         <ul>
-{chr(10).join(f'          <li><a href="/{slug}/">{esc(name)}</a> &mdash; {esc(desc)}</li>' for slug, name, desc in CATEGORIES)}
+{chr(10).join(f'          <li><a href="/{slug}/">{esc(name)}</a> &mdash; {esc(desc)}</li>' for slug, name, desc, _ in CATEGORIES)}
         </ul>
         <h2>Follow Alexander</h2>
         <div class="social-list">
@@ -655,7 +715,7 @@ def build_blog(posts: list[Post]) -> str:
     )
 
 
-def build_category(slug: str, name: str, desc: str, posts: list[Post]) -> str:
+def build_category(slug: str, name: str, desc: str, intro: str, posts: list[Post]) -> str:
     mine = [p for p in posts if p.category == slug]
     body = f"""    <div class="container">
 {breadcrumbs([("Home", "/"), (name, f"/{slug}/")])}
@@ -663,6 +723,7 @@ def build_category(slug: str, name: str, desc: str, posts: list[Post]) -> str:
         <p class="eyebrow">Category</p>
         <h1>{esc(name)}</h1>
         <p class="lead">{esc(desc)}</p>
+        <div class="category-intro"><p>{esc(intro)}</p></div>
       </header>
 {post_grid(mine, "h2")}
     </div>
@@ -673,14 +734,14 @@ def build_category(slug: str, name: str, desc: str, posts: list[Post]) -> str:
             "@id": url(f"/{slug}/"),
             "url": url(f"/{slug}/"),
             "name": name,
-            "description": desc,
+            "description": intro,
             "isPartOf": {"@id": url("/#website")},
         },
         breadcrumb_ld([("Home", "/"), (name, f"/{slug}/")]),
     )
     return page(
         title=name,
-        description=f"{desc} Articles on {name.lower()} by Alexander Caldwell.",
+        description=f"{desc} Articles on {name.lower()} by {AUTHOR_NAME}.",
         path=f"/{slug}/",
         current=f"/{slug}/",
         body=body,
@@ -695,12 +756,22 @@ def build_post(p: Post, posts: list[Post]) -> str:
     crumbs = [("Home", "/"), (p.category_name, f"/{p.category}/"), (p.title, p.path)]
     article_html, headings = add_heading_ids(p.body)
     toc = ""
-    if len(headings) >= 3:
+    if headings:
         items = "".join(f'<li><a href="#{hid}">{esc(text)}</a></li>' for hid, text in headings)
         toc = f"""        <nav class="toc" aria-label="In this article">
           <p class="toc-title">In this article</p>
           <ol>{items}</ol>
         </nav>
+"""
+    summary = ""
+    if p.summary:
+        points = "\n            ".join(f"<li>{esc(point)}</li>" for point in p.summary)
+        summary = f"""        <aside class="summary" aria-labelledby="key-takeaways">
+          <p class="summary-title" id="key-takeaways">Key takeaways</p>
+          <ul>
+            {points}
+          </ul>
+        </aside>
 """
     body = f"""    <div class="container narrow">
 {breadcrumbs(crumbs)}
@@ -718,7 +789,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
             <span>{p.minutes} min read</span>
           </div>
         </header>
-{toc}{article_html}
+{summary}{toc}{article_html}
       </article>
 {author_box()}
     </div>
@@ -741,10 +812,17 @@ def build_post(p: Post, posts: list[Post]) -> str:
             "datePublished": p.date.isoformat(),
             "dateModified": p.date.isoformat(),
             "inLanguage": "en",
-            "author": {"@id": url("/#person")},
+            "author": {
+                "@type": "Person",
+                "@id": url("/#person"),
+                "name": AUTHOR_NAME,
+                "jobTitle": AUTHOR_TITLE,
+                "url": url("/about/"),
+            },
             "publisher": {"@id": url("/#person")},
             "isPartOf": {"@id": url("/#website")},
             "wordCount": len(strip_tags(p.body).split()),
+            "abstract": " ".join(p.summary) if p.summary else p.description,
         },
         person_ld(),
         breadcrumb_ld(crumbs),
@@ -900,7 +978,7 @@ def build_robots() -> str:
 
 def clean_output() -> None:
     """Remove previously generated directories so deleted posts disappear."""
-    for name in ["about", "blog", "terms", "privacy", *[slug for slug, _, _ in CATEGORIES]]:
+    for name in ["about", "blog", "terms", "privacy", *[slug for slug, *_ in CATEGORIES]]:
         target = ROOT / name
         if target.is_dir():
             shutil.rmtree(target)
@@ -922,8 +1000,8 @@ def main() -> None:
     write(ROOT / "blog" / "index.html", build_blog(posts))
     sitemap.append(("/blog/", newest, "weekly", "0.8"))
 
-    for slug, name, desc in CATEGORIES:
-        write(ROOT / slug / "index.html", build_category(slug, name, desc, posts))
+    for slug, name, desc, intro in CATEGORIES:
+        write(ROOT / slug / "index.html", build_category(slug, name, desc, intro, posts))
         mine = [p.date for p in posts if p.category == slug]
         sitemap.append((f"/{slug}/", max(mine, default=newest), "weekly", "0.7"))
 
