@@ -18,6 +18,7 @@ Outputs (written next to this file)
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import html
 import json
 import re
@@ -48,6 +49,14 @@ CREDENTIALS = [
     "B.S. Finance, University of California, Berkeley",
     "Payroll and tax compliance for businesses of all sizes",
     "Payroll solutions specialist at Online Pay Stub",
+]
+EXPERTISE = [
+    "Payroll management",
+    "Pay stub compliance",
+    "Tax withholding",
+    "W-2 and 1099 reporting",
+    "Paycheck calculations",
+    "Payroll record keeping",
 ]
 TRUST = [
     ("12+", "years of payroll experience"),
@@ -165,6 +174,17 @@ SOCIAL_ICONS = {
 }
 
 TODAY = dt.date.today()
+
+
+def asset_url(rel_path: str) -> str:
+    """Site path for an asset, fingerprinted so cached copies are replaced.
+
+    vercel.json serves /assets/* as immutable for a year, so the query string
+    is what makes a changed stylesheet reach returning visitors.
+    """
+    target = ROOT / rel_path.lstrip("/")
+    digest = hashlib.md5(target.read_bytes()).hexdigest()[:10] if target.exists() else "0"
+    return f"{rel_path}?v={digest}"
 
 
 # --------------------------------------------------------------------------- #
@@ -420,7 +440,7 @@ def page(
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{FONTS_URL}">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="{asset_url("/assets/style.css")}">
   <meta property="og:type" content="{og_type}">
   <meta property="og:url" content="{url(path)}">
   <meta property="og:title" content="{esc(full_title)}">
@@ -559,10 +579,45 @@ def build_home(posts: list[Post]) -> str:
     side = posts[1:4]
     rest = posts[1:7]
     creds = "\n            ".join(f"<li>{esc(c)}</li>" for c in CREDENTIALS)
-    trust = "\n        ".join(
-        f'<div class="trust-item"><span class="trust-value">{esc(v)}</span><span class="trust-label">{esc(l)}</span></div>'
+    stats = "\n            ".join(
+        f'<div class="stat"><span class="stat-value">{esc(v)}</span> <span class="stat-label">{esc(l)}</span></div>'
         for v, l in TRUST
     )
+    skills = "\n            ".join(f"<li>{esc(x)}</li>" for x in EXPERTISE)
+    bio = "\n          ".join(f"<p>{esc(par)}</p>" for par in AUTHOR_BIO)
+    about_section = f"""    <section class="section about-section" id="about-alexander" aria-labelledby="about-alexander-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="about-alexander-title">About Alexander Caldwell</h2>
+          <a href="/about/" class="more">Full profile &rarr;</a>
+        </div>
+        <div class="about-grid">
+          <aside class="about-aside">
+            <img class="about-photo" src="{AUTHOR_PHOTO}" width="400" height="400"
+                 alt="Portrait of {esc(AUTHOR_NAME)}" loading="lazy">
+            <p class="author-name">{esc(AUTHOR_NAME)}</p>
+            <p class="author-title">{esc(AUTHOR_TITLE)}</p>
+            <div class="social-list">
+          {social_links()}
+            </div>
+          </aside>
+          <div class="about-body">
+          {bio}
+            <p>On this site he answers the questions he hears most often from employees, freelancers
+              and business owners, covering everything from a single line on a pay stub to the
+              quarterly filings a growing company cannot afford to miss.</p>
+            <h3 class="about-subhead">Areas of expertise</h3>
+            <ul class="chip-list">
+            {skills}
+            </ul>
+            <div class="stat-row">
+            {stats}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+"""
     featured_html = ""
     if featured:
         side_items = "\n            ".join(
@@ -627,12 +682,7 @@ def build_home(posts: list[Post]) -> str:
       </div>
     </section>
 
-    <section class="trust" aria-label="Credentials">
-      <div class="container trust-inner">
-        {trust}
-      </div>
-    </section>
-
+{about_section}
 {featured_html}
     <section class="section section-alt">
       <div class="container">
