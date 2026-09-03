@@ -56,7 +56,7 @@
   </url>
   <url>
     <loc>https://alexandercaldwell.com/1099-forms/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -81,6 +81,24 @@
   <url>
     <loc>https://alexandercaldwell.com/w-2-form/what-happens-if-i-only-file-1-w-2-form/</loc>
     <lastmod>2026-09-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/1099-forms/what-is-form-1099-nec/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/1099-forms/what-is-form-1099-misc/</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/1099-forms/1099-pay-stub-for-contractors/</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
