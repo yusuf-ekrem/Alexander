@@ -162,6 +162,11 @@ SOCIAL = [
     ("TikTok", "https://www.tiktok.com/@alexandercaldwellops"),
     ("Tumblr", "https://www.tumblr.com/blog/alexandercaldwell"),
     ("Pinterest", "https://www.pinterest.com/alexandercaldwellfinance/"),
+    (
+        "Facebook",
+        "https://www.facebook.com/people/Alexander-Caldwell/"
+        "pfbid02jr97yhLrfD5u1CkgoNQ8qErAiNqA2nmgjonSCqbCjpq9wdcU31UDeLp2rUT5vhpPl/",
+    ),
 ]
 
 # Slug -> inline SVG icon (24x24 viewBox, currentColor).
@@ -170,6 +175,7 @@ SOCIAL_ICONS = {
     "Medium": '<path d="M13.5 12a6.4 6.4 0 1 1-12.8 0 6.4 6.4 0 0 1 12.8 0Zm7 0c0 3.3-1.4 6-3.2 6s-3.2-2.7-3.2-6 1.4-6 3.2-6 3.2 2.7 3.2 6Zm2.8 0c0 3-.5 5.4-1.1 5.4S21 15 21 12s.5-5.4 1.1-5.4 1.2 2.4 1.2 5.4Z"/>',
     "TikTok": '<path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.2v13.1a2.7 2.7 0 1 1-2.7-2.7c.3 0 .6 0 .8.1V10.2a6 6 0 1 0 5.1 5.9V9.6a7.5 7.5 0 0 0 4.4 1.4V7.8a4.4 4.4 0 0 1-3.3-2Z"/>',
     "Tumblr": '<path d="M14.6 21c-3.2 0-5-2-5-4.8v-5.6H7.4V7.7c2.5-.8 3.3-2.9 3.5-4.7h2.9v4.4h3.4v3.2h-3.4v4.9c0 1.3.7 1.9 1.8 1.9.6 0 1.3-.2 1.8-.4l.9 2.9c-1 .6-2.5 1.1-3.7 1.1Z"/>',
+    "Facebook": '<path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/>',
     "Pinterest": '<path d="M12 2a10 10 0 0 0-3.6 19.3c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.4 0 .9-.5 2.1-.8 3.3-.2 1 .5 1.8 1.5 1.8 1.8 0 3.1-1.9 3.1-4.6 0-2.4-1.7-4-4.2-4-2.8 0-4.5 2.1-4.5 4.3 0 .9.3 1.8.7 2.3.1.1.1.2.1.3l-.3 1.1c0 .2-.1.2-.3.1-1.2-.6-2-2.4-2-3.8 0-3.1 2.3-6 6.5-6 3.4 0 6.1 2.4 6.1 5.7 0 3.4-2.1 6.1-5.1 6.1-1 0-1.9-.5-2.3-1.1l-.6 2.4c-.2.9-.8 2-1.2 2.6A10 10 0 1 0 12 2Z"/>',
 }
 
@@ -620,6 +626,7 @@ def build_home(posts: list[Post]) -> str:
 """
     featured_html = ""
     if featured:
+        side_html = ""
         side_items = "\n            ".join(
             f"""<li>
               <a class="card-category" href="/{q.category}/">{esc(q.category_name)}</a>
@@ -628,12 +635,19 @@ def build_home(posts: list[Post]) -> str:
             </li>"""
             for q in side
         )
+        if side:
+            side_html = f"""<aside class="featured-side">
+          <h4>Recently published</h4>
+          <ul class="mini-list">
+            {side_items}
+          </ul>
+        </aside>"""
         featured_html = f"""    <section class="section container">
       <div class="section-head">
         <h2>Featured</h2>
         <a href="/blog/" class="more">All articles &rarr;</a>
       </div>
-      <div class="featured">
+      <div class="featured{'' if side else ' featured-single'}">
         <article class="featured-main">
           <a class="card-category" href="/{featured.category}/">{esc(featured.category_name)}</a>
           <h3><a href="{featured.path}">{esc(featured.title)}</a></h3>
@@ -647,12 +661,19 @@ def build_home(posts: list[Post]) -> str:
           </div>
           <div class="actions"><a href="{featured.path}" class="button">Read the article</a></div>
         </article>
-        <aside class="featured-side">
-          <h4>Recently published</h4>
-          <ul class="mini-list">
-            {side_items}
-          </ul>
-        </aside>
+        {side_html}
+      </div>
+    </section>
+"""
+    latest_html = ""
+    if rest:
+        latest_html = f"""    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Latest articles</h2>
+          <a href="/blog/" class="more">View all &rarr;</a>
+        </div>
+{post_grid(rest)}
       </div>
     </section>
 """
@@ -684,17 +705,8 @@ def build_home(posts: list[Post]) -> str:
 
 {about_section}
 {featured_html}
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-head">
-          <h2>Latest articles</h2>
-          <a href="/blog/" class="more">View all &rarr;</a>
-        </div>
-{post_grid(rest)}
-      </div>
-    </section>
-
-    <section class="section container">
+{latest_html}
+    <section class="section{' section-alt' if not rest else ''} container">
       <div class="section-head">
         <h2>Browse by topic</h2>
       </div>
@@ -804,6 +816,15 @@ def build_post(p: Post, posts: list[Post]) -> str:
     if len(related) < 3:
         related += [q for q in posts if q.category != p.category and q not in related][: 3 - len(related)]
     crumbs = [("Home", "/"), (p.category_name, f"/{p.category}/"), (p.title, p.path)]
+    keep_reading = ""
+    if related:
+        keep_reading = f"""    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head"><h2>Keep reading</h2></div>
+{post_grid(related)}
+      </div>
+    </section>
+"""
     article_html, headings = add_heading_ids(p.body)
     toc = ""
     if headings:
@@ -843,12 +864,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
       </article>
 {author_box()}
     </div>
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-head"><h2>Keep reading</h2></div>
-{post_grid(related)}
-      </div>
-    </section>
+{keep_reading}
 """
     ld = graph(
         {
