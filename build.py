@@ -39,7 +39,8 @@ AUTHOR_NAME = "Alexander Caldwell"
 AUTHOR_TITLE = "Financial Expert"
 AUTHOR_PHOTO = "/assets/alexander-caldwell.jpg"       # 400x400
 AUTHOR_PHOTO_SM = "/assets/alexander-caldwell-sm.jpg" # 192x192, for small avatars
-OG_IMAGE = "/assets/og-image.jpg"                     # 1200x630
+OG_IMAGE = "/assets/og-image.jpg"                     # 1200x630 site-wide fallback
+BLOG_IMAGE_DIR = "assets/blog"                        # <slug>.jpg (1200w) + <slug>-sm.jpg (620w)
 FONTS_URL = (
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700"
     "&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap"
@@ -265,6 +266,10 @@ class Post:
         self.date = dt.date.fromisoformat(meta["date"])
         self.description = meta["description"]
         self.summary = meta.get("summary", [])
+        self.image = self.image_sm = ""
+        if (ROOT / BLOG_IMAGE_DIR / f"{self.slug}.jpg").exists():
+            self.image = f"/{BLOG_IMAGE_DIR}/{self.slug}.jpg"
+            self.image_sm = f"/{BLOG_IMAGE_DIR}/{self.slug}-sm.jpg"
         self.body = body.strip()
         self.minutes = reading_time(self.body)
 
@@ -422,11 +427,16 @@ def page(
     body: str,
     current: str = "",
     og_type: str = "website",
+    image: str = "",
     jsonld: dict | None = None,
     noindex: bool = False,
     canonical: bool = True,
 ) -> str:
     full_title = SITE_NAME if path == "/" else f"{title} · {SITE_NAME}"
+    image_alt = (
+        f"{title} — guide by {AUTHOR_NAME}" if image
+        else f"Portrait of {AUTHOR_NAME} with the site name and tagline"
+    )
     robots = '\n  <meta name="robots" content="noindex">' if noindex else ""
     canon = f'\n  <link rel="canonical" href="{url(path)}">' if canonical else ""
     ld = ""
@@ -443,7 +453,9 @@ def page(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(full_title)}</title>
   <meta name="description" content="{esc(description)}">{robots}{canon}
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="{asset_url("/assets/favicon-32.png")}" sizes="32x32" type="image/png">
+  <link rel="icon" href="{asset_url("/assets/favicon-192.png")}" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="{asset_url("/assets/apple-touch-icon.png")}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{FONTS_URL}">
@@ -453,12 +465,10 @@ def page(
   <meta property="og:title" content="{esc(full_title)}">
   <meta property="og:description" content="{esc(description)}">
   <meta property="og:site_name" content="{esc(SITE_NAME)}">
-  <meta property="og:image" content="{url(OG_IMAGE)}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Portrait of {esc(AUTHOR_NAME)} with the site name and tagline">
+  <meta property="og:image" content="{url(image or OG_IMAGE)}">
+  <meta property="og:image:alt" content="{esc(image_alt)}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="{url(OG_IMAGE)}">
+  <meta name="twitter:image" content="{url(image or OG_IMAGE)}">
   <meta name="twitter:site" content="@alexandercaldw">
   <meta name="theme-color" content="#1b2532">{ld}
 </head>
@@ -519,8 +529,15 @@ def breadcrumb_ld(items: list[tuple[str, str]]) -> dict:
 # --------------------------------------------------------------------------- #
 
 def post_card(p: Post, heading: str = "h3") -> str:
+    thumb = ""
+    if p.image_sm:
+        thumb = f"""          <a class="card-media" href="{p.path}" tabindex="-1" aria-hidden="true">
+            <img src="{p.image_sm}" width="620" height="349" loading="lazy" decoding="async"
+                 alt="{esc(p.title)} — guide by {esc(AUTHOR_NAME)}">
+          </a>
+"""
     return f"""        <article class="card">
-          <a class="card-category" href="/{p.category}/">{esc(p.category_name)}</a>
+{thumb}          <a class="card-category" href="/{p.category}/">{esc(p.category_name)}</a>
           <{heading} class="card-title"><a href="{p.path}">{esc(p.title)}</a></{heading}>
           <p class="card-excerpt">{esc(p.description)}</p>
           <div class="card-meta">
@@ -643,6 +660,13 @@ def build_home(posts: list[Post]) -> str:
             {side_items}
           </ul>
         </aside>"""
+        featured_media = ""
+        if featured.image:
+            featured_media = f"""<a class="featured-media" href="{featured.path}" tabindex="-1" aria-hidden="true">
+            <img src="{featured.image}" width="1200" height="675" decoding="async"
+                 alt="{esc(featured.title)} — guide by {esc(AUTHOR_NAME)}">
+          </a>
+          """
         featured_html = f"""    <section class="section container">
       <div class="section-head">
         <h2>Featured</h2>
@@ -650,7 +674,7 @@ def build_home(posts: list[Post]) -> str:
       </div>
       <div class="featured{'' if side else ' featured-single'}">
         <article class="featured-main">
-          <a class="card-category" href="/{featured.category}/">{esc(featured.category_name)}</a>
+          {featured_media}<a class="card-category" href="/{featured.category}/">{esc(featured.category_name)}</a>
           <h3><a href="{featured.path}">{esc(featured.title)}</a></h3>
           <p>{esc(featured.description)}</p>
           <div class="card-meta">
@@ -817,6 +841,13 @@ def build_post(p: Post, posts: list[Post]) -> str:
     if len(related) < 3:
         related += [q for q in posts if q.category != p.category and q not in related][: 3 - len(related)]
     crumbs = [("Home", "/"), (p.category_name, f"/{p.category}/"), (p.title, p.path)]
+    hero = ""
+    if p.image:
+        hero = f"""          <figure class="post-hero">
+            <img src="{p.image}" width="1200" height="675" fetchpriority="high" decoding="async"
+                 alt="{esc(p.title)} — guide by {esc(AUTHOR_NAME)}">
+          </figure>
+"""
     keep_reading = ""
     if related:
         keep_reading = f"""    <section class="section section-alt">
@@ -860,7 +891,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
             <span aria-hidden="true">&middot;</span>
             <span>{p.minutes} min read</span>
           </div>
-        </header>
+{hero}        </header>
 {summary}{toc}{article_html}
       </article>
 {author_box()}
@@ -889,6 +920,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
             "publisher": {"@id": url("/#person")},
             "isPartOf": {"@id": url("/#website")},
             "wordCount": len(strip_tags(p.body).split()),
+            **({"image": url(p.image)} if p.image else {}),
             "abstract": " ".join(p.summary) if p.summary else p.description,
         },
         person_ld(),
@@ -901,6 +933,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
         current=f"/{p.category}/",
         body=body,
         og_type="article",
+        image=p.image,
         jsonld=ld,
     )
 

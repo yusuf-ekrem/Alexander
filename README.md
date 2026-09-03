@@ -13,9 +13,11 @@ repository root as-is.
 build.py              # generator: run `python3 build.py` from the repo root
 content/posts/*.html  # one article per file (metadata header + HTML body)
 assets/style.css      # styles; brand palette #3f2df0 / #1bdec8 / #3c4b5c
-assets/favicon.svg
+assets/favicon-32.png             # favicons cropped from the author photo
+assets/favicon-192.png  assets/apple-touch-icon.png
 assets/alexander-caldwell.jpg     # author photo (400x400) + -sm.jpg (192x192)
 assets/og-image.jpg               # social sharing card (1200x630)
+assets/blog/<slug>.jpg            # article cover (1200w) + <slug>-sm.jpg (620w)
 
 index.html            # generated: home page
 about/  blog/         # generated: bio page, all-articles page
@@ -41,7 +43,13 @@ description: One or two sentences used for the card, meta description and JSON-L
 ```
 
 `category` must be one of `paystubs`, `payroll`, `tax`, `finance`, `paycheck`, `w-2-form`,
-`1099-forms`. Then run the build and commit the result:
+`1099-forms`. Repeat the `summary:` line for each key-takeaway bullet.
+
+To give the article a cover image, drop `assets/blog/<slug>.jpg` (1200x675) and
+`assets/blog/<slug>-sm.jpg` (620x349) next to the others; the build picks them up by
+filename and uses them for the card thumbnail, the article hero, the Open Graph image and
+the JSON-LD `image`. Alt text is generated from the title. Then run the build and commit
+the result:
 
 ```bash
 python3 build.py
