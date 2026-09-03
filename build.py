@@ -29,7 +29,7 @@ POSTS_DIR = ROOT / "content" / "posts"
 
 SITE_URL = "https://alexandercaldwell.com"
 SITE_NAME = "Alexander Caldwell"
-TAGLINE = "Personal finance, payroll and paycheck guides"
+TAGLINE = "Payroll & personal finance insights"
 SITE_DESCRIPTION = (
     "Plain-English guides on pay stubs, payroll, taxes, paychecks, W-2 and 1099 forms "
     "from payroll expert Alexander Caldwell."
@@ -39,6 +39,22 @@ AUTHOR_TITLE = "Financial Expert"
 AUTHOR_PHOTO = "/assets/alexander-caldwell.jpg"       # 400x400
 AUTHOR_PHOTO_SM = "/assets/alexander-caldwell-sm.jpg" # 192x192, for small avatars
 OG_IMAGE = "/assets/og-image.jpg"                     # 1200x630
+FONTS_URL = (
+    "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700"
+    "&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap"
+)
+CREDENTIALS = [
+    "12+ years in payroll management",
+    "B.S. Finance, University of California, Berkeley",
+    "Payroll and tax compliance for businesses of all sizes",
+    "Payroll solutions specialist at Online Pay Stub",
+]
+TRUST = [
+    ("12+", "years of payroll experience"),
+    ("UC Berkeley", "bachelor's degree in finance"),
+    ("7", "topic areas, plain-English guidance"),
+    ("All sizes", "of businesses served, startups to enterprises"),
+]
 AUTHOR_BIO_SHORT = (
     "Financial expert specializing in payroll management, with over 12 years of "
     "experience helping businesses and employees keep their financial records accurate."
@@ -110,6 +126,29 @@ def reading_time(markup: str) -> int:
 
 def fmt_date(d: dt.date) -> str:
     return d.strftime("%B %-d, %Y")
+
+
+def slugify(text: str) -> str:
+    text = re.sub(r"[^a-z0-9]+", "-", strip_tags(text).lower()).strip("-")
+    return text or "section"
+
+
+def add_heading_ids(markup: str) -> tuple[str, list[tuple[str, str]]]:
+    """Give every <h2> an id and return (markup, [(id, text), ...])."""
+    headings: list[tuple[str, str]] = []
+    used: set[str] = set()
+
+    def repl(m: re.Match) -> str:
+        text = m.group(2)
+        base = slugify(text)
+        hid, n = base, 2
+        while hid in used:
+            hid, n = f"{base}-{n}", n + 1
+        used.add(hid)
+        headings.append((hid, html.unescape(strip_tags(text)).strip()))
+        return f'<h2 id="{hid}"{m.group(1)}>{text}</h2>'
+
+    return re.sub(r"<h2([^>]*)>(.*?)</h2>", repl, markup, flags=re.S), headings
 
 
 def write(path: Path, content: str) -> None:
@@ -197,14 +236,30 @@ def social_links(with_icons: bool = True) -> str:
     return "\n          ".join(out)
 
 
+def brand(extra_class: str = "") -> str:
+    cls = f"brand {extra_class}".strip()
+    return f"""<a href="/" class="{cls}" aria-label="{esc(SITE_NAME)} home">
+        <span class="brand-mark" aria-hidden="true">AC</span>
+        <span class="brand-text">
+          <span class="brand-name">{esc(SITE_NAME)}</span>
+          <span class="brand-tag">{esc(TAGLINE)}</span>
+        </span>
+      </a>"""
+
+
 def header(current: str) -> str:
     return f"""  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span class="topbar-tagline">Independent guidance on pay stubs, payroll and paycheck taxes</span>
+      <div class="topbar-social" aria-label="Social profiles">
+          {social_links()}
+      </div>
+    </div>
+  </div>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="/" class="brand" aria-label="{esc(SITE_NAME)} home">
-        <span class="brand-mark" aria-hidden="true">AC</span>
-        <span class="brand-text">{esc(SITE_NAME)}</span>
-      </a>
+      {brand()}
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
         <span class="nav-toggle-bar"></span>
         <span class="sr-only">Menu</span>
@@ -218,33 +273,43 @@ def header(current: str) -> str:
 
 
 def footer() -> str:
-    cat_links = "\n          ".join(
-        f'<a href="/{slug}/">{esc(name)}</a>' for slug, name, _ in CATEGORIES
+    cat_links = "\n            ".join(
+        f'<li><a href="/{slug}/">{esc(name)}</a></li>' for slug, name, _ in CATEGORIES
     )
     return f"""  <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-about">
-          <a href="/" class="brand brand-footer">
-            <span class="brand-mark" aria-hidden="true">AC</span>
-            <span class="brand-text">{esc(SITE_NAME)}</span>
-          </a>
+          {brand("brand-footer")}
           <p>{esc(AUTHOR_BIO_SHORT)}</p>
+          <p class="small">Educational content only. Nothing on this site is legal, tax or financial advice; confirm current rules with the IRS or a qualified professional.</p>
         </div>
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="/">Home</a>
-          <a href="/about/">About</a>
-          {cat_links}
-          <a href="/terms/">ToS</a>
-          <a href="/privacy/">Privacy</a>
+        <nav class="footer-col" aria-label="Footer">
+          <p class="footer-heading">Site</p>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/blog/">All articles</a></li>
+            <li><a href="/terms/">ToS</a></li>
+            <li><a href="/privacy/">Privacy</a></li>
+          </ul>
         </nav>
-        <div class="footer-social" aria-label="Social profiles">
-          {social_links()}
+        <nav class="footer-col" aria-label="Topics">
+          <p class="footer-heading">Topics</p>
+          <ul>
+            {cat_links}
+          </ul>
+        </nav>
+        <div class="footer-col footer-social">
+          <p class="footer-heading">Follow</p>
+          <ul>
+            {"".join(f'<li>{a}</li>' for a in social_links().split(chr(10)))}
+          </ul>
         </div>
       </div>
       <div class="footer-bottom">
         <span>&copy; {TODAY.year} {esc(SITE_NAME)}. All rights reserved.</span>
-        <span>Educational content only; not legal, tax or financial advice.</span>
+        <span><a href="/terms/">Terms of Service</a> &middot; <a href="/privacy/">Privacy Policy</a></span>
       </div>
     </div>
   </footer>
@@ -292,6 +357,9 @@ def page(
   <title>{esc(full_title)}</title>
   <meta name="description" content="{esc(description)}">{robots}{canon}
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{FONTS_URL}">
   <link rel="stylesheet" href="/assets/style.css">
   <meta property="og:type" content="{og_type}">
   <meta property="og:url" content="{url(path)}">
@@ -305,7 +373,7 @@ def page(
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{url(OG_IMAGE)}">
   <meta name="twitter:site" content="@alexandercaldw">
-  <meta name="theme-color" content="#3f2df0">{ld}
+  <meta name="theme-color" content="#1b2532">{ld}
 </head>
 <body>
 {header(current)}
@@ -392,6 +460,7 @@ def category_grid(posts: list[Post]) -> str:
         label = f"{n} article" if n == 1 else f"{n} articles"
         tiles.append(
             f"""        <a class="category-tile" href="/{slug}/">
+          <span class="category-index">{len(tiles) + 1:02d}</span>
           <span class="category-name">{esc(name)}</span>
           <span class="category-desc">{esc(desc)}</span>
           <span class="category-count">{label}</span>
@@ -426,42 +495,100 @@ def breadcrumbs(items: list[tuple[str, str]]) -> str:
 # --------------------------------------------------------------------------- #
 
 def build_home(posts: list[Post]) -> str:
-    latest = posts[:6]
+    featured = posts[0] if posts else None
+    side = posts[1:4]
+    rest = posts[1:7]
+    creds = "\n            ".join(f"<li>{esc(c)}</li>" for c in CREDENTIALS)
+    trust = "\n        ".join(
+        f'<div class="trust-item"><span class="trust-value">{esc(v)}</span><span class="trust-label">{esc(l)}</span></div>'
+        for v, l in TRUST
+    )
+    featured_html = ""
+    if featured:
+        side_items = "\n            ".join(
+            f"""<li>
+              <a class="card-category" href="/{q.category}/">{esc(q.category_name)}</a>
+              <a class="mini-title" href="{q.path}">{esc(q.title)}</a>
+              <div class="card-meta"><time datetime="{q.date.isoformat()}">{fmt_date(q.date)}</time><span aria-hidden="true">&middot;</span><span>{q.minutes} min read</span></div>
+            </li>"""
+            for q in side
+        )
+        featured_html = f"""    <section class="section container">
+      <div class="section-head">
+        <h2>Featured</h2>
+        <a href="/blog/" class="more">All articles &rarr;</a>
+      </div>
+      <div class="featured">
+        <article class="featured-main">
+          <a class="card-category" href="/{featured.category}/">{esc(featured.category_name)}</a>
+          <h3><a href="{featured.path}">{esc(featured.title)}</a></h3>
+          <p>{esc(featured.description)}</p>
+          <div class="card-meta">
+            <span>By {esc(AUTHOR_NAME)}</span>
+            <span aria-hidden="true">&middot;</span>
+            <time datetime="{featured.date.isoformat()}">{fmt_date(featured.date)}</time>
+            <span aria-hidden="true">&middot;</span>
+            <span>{featured.minutes} min read</span>
+          </div>
+          <div class="actions"><a href="{featured.path}" class="button">Read the article</a></div>
+        </article>
+        <aside class="featured-side">
+          <h4>Recently published</h4>
+          <ul class="mini-list">
+            {side_items}
+          </ul>
+        </aside>
+      </div>
+    </section>
+"""
     body = f"""    <section class="hero">
       <div class="container hero-inner">
         <div class="hero-copy">
-          <p class="eyebrow">Personal finance blog</p>
-          <h1>Understand every line of your paycheck.</h1>
-          <p class="lead">Plain-English guides on pay stubs, payroll, taxes, W-2 and 1099 forms, written by a payroll specialist with more than a decade in the field.</p>
+          <p class="eyebrow">{esc(TAGLINE)}</p>
+          <h1>Clarity on every paycheck, pay stub and tax form.</h1>
+          <p class="lead">Practical, plain-English guidance on payroll, withholding, W-2 and 1099 forms from a finance professional with more than a decade in payroll management.</p>
           <div class="actions">
-            <a href="/blog/" class="button">Browse all articles</a>
-            <a href="/about/" class="button secondary">Meet Alexander</a>
+            <a href="/blog/" class="button">Browse the articles</a>
+            <a href="/about/" class="button secondary">About Alexander</a>
           </div>
         </div>
         <div class="hero-card">
-          <img class="avatar avatar-lg" src="{AUTHOR_PHOTO}" width="96" height="96" alt="Portrait of {esc(AUTHOR_NAME)}">
-          <p class="author-name">{esc(AUTHOR_NAME)}</p>
-          <p class="author-title">{esc(AUTHOR_TITLE)} &middot; 12+ years in payroll</p>
-          <p class="muted">B.S. Finance, UC Berkeley. Helping businesses of all sizes run accurate, compliant payroll.</p>
+          <div class="hero-card-top">
+            <img class="avatar avatar-lg" src="{AUTHOR_PHOTO}" width="96" height="96" alt="Portrait of {esc(AUTHOR_NAME)}">
+            <div>
+              <p class="author-name">{esc(AUTHOR_NAME)}</p>
+              <p class="author-title">{esc(AUTHOR_TITLE)}</p>
+            </div>
+          </div>
+          <ul class="cred-list">
+            {creds}
+          </ul>
         </div>
+      </div>
+    </section>
+
+    <section class="trust" aria-label="Credentials">
+      <div class="container trust-inner">
+        {trust}
+      </div>
+    </section>
+
+{featured_html}
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Latest articles</h2>
+          <a href="/blog/" class="more">View all &rarr;</a>
+        </div>
+{post_grid(rest)}
       </div>
     </section>
 
     <section class="section container">
       <div class="section-head">
-        <h2>Latest articles</h2>
-        <a href="/blog/" class="more">All articles &rarr;</a>
+        <h2>Browse by topic</h2>
       </div>
-{post_grid(latest)}
-    </section>
-
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-head">
-          <h2>Browse by topic</h2>
-        </div>
 {category_grid(posts)}
-      </div>
     </section>
 """
     return page(
@@ -566,6 +693,15 @@ def build_post(p: Post, posts: list[Post]) -> str:
     if len(related) < 3:
         related += [q for q in posts if q.category != p.category and q not in related][: 3 - len(related)]
     crumbs = [("Home", "/"), (p.category_name, f"/{p.category}/"), (p.title, p.path)]
+    article_html, headings = add_heading_ids(p.body)
+    toc = ""
+    if len(headings) >= 3:
+        items = "".join(f'<li><a href="#{hid}">{esc(text)}</a></li>' for hid, text in headings)
+        toc = f"""        <nav class="toc" aria-label="In this article">
+          <p class="toc-title">In this article</p>
+          <ol>{items}</ol>
+        </nav>
+"""
     body = f"""    <div class="container narrow">
 {breadcrumbs(crumbs)}
       <article class="prose post">
@@ -582,7 +718,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
             <span>{p.minutes} min read</span>
           </div>
         </header>
-{p.body}
+{toc}{article_html}
       </article>
 {author_box()}
     </div>
