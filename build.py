@@ -118,10 +118,11 @@ CATEGORIES = [
         "Finance",
         "Budgeting, saving and planning around your income.",
         "Personal finance advice usually starts from salary; real budgets start from the amount "
-        "that actually reaches your account. This section takes a payroll-first view of household "
-        "money: building a budget on net pay, recognising the saving and spending decisions your "
-        "pay stub already makes for you, automating contributions through payroll, and planning for "
-        "the irregular costs that arrive every year without ever being budgeted.",
+        "that actually reaches your account. This section takes a payroll-first view of working "
+        "life: building a budget on net pay, documenting income when you are paid in cash, keeping "
+        "the records that prove what you earned, and the workplace habits behind steady earnings "
+        "such as setting goals you can actually review and keeping a team focused when conditions "
+        "are unstable.",
     ),
     (
         "paycheck",
