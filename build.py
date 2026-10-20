@@ -41,6 +41,7 @@ AUTHOR_PHOTO = "/assets/alexander-caldwell.jpg"       # 400x400
 AUTHOR_PHOTO_SM = "/assets/alexander-caldwell-sm.jpg" # 192x192, for small avatars
 OG_IMAGE = "/assets/og-image.jpg"                     # 1200x630 site-wide fallback
 BLOG_IMAGE_DIR = "assets/blog"                        # <slug>.jpg (1200w) + <slug>-sm.jpg (620w)
+GOOGLE_SITE_VERIFICATION = "Dj-LTSm7ZiHcmJsVwXDJKWA1c6eUqmYuZjyo56jokdY"
 FONTS_URL = (
     "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700"
     "&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap"
@@ -453,6 +454,7 @@ def page(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(full_title)}</title>
   <meta name="description" content="{esc(description)}">{robots}{canon}
+  <meta name="google-site-verification" content="{GOOGLE_SITE_VERIFICATION}">
   <link rel="icon" href="{asset_url("/assets/favicon-32.png")}" sizes="32x32" type="image/png">
   <link rel="icon" href="{asset_url("/assets/favicon-192.png")}" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="{asset_url("/assets/apple-touch-icon.png")}">
