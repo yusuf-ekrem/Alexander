@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://alexandercaldwell.com/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,13 +15,13 @@
   </url>
   <url>
     <loc>https://alexandercaldwell.com/blog</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paystubs</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -33,25 +33,25 @@
   </url>
   <url>
     <loc>https://alexandercaldwell.com/tax</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/finance</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-09-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paycheck</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/w-2-form</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -62,6 +62,162 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://alexandercaldwell.com/paystubs/ee-vs-er-on-your-paystub</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/what-is-sdi-on-your-paystub</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/medical-er-on-your-paystub</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/what-is-std-on-your-paystub</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/what-does-ftd-mean-on-a-paystub</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/what-is-ltd-on-your-paystub</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/med-ee-on-your-paystub</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/fed-mwt-ee-on-your-paycheck</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/what-is-gtl-on-your-paystub</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/what-is-sit-on-your-paystub</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/veterans-day-direct-deposit</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/arizona-state-income-tax</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/georgia-state-income-tax</loc>
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/florida-state-income-tax</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/california-state-income-tax</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/proof-of-income-for-an-apartment</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/tax/what-is-futa</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/w-2-form/corrected-w-2-form-w-2c</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/w-2-form/how-to-get-a-copy-of-your-w-2-online</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/w-2-form/what-is-a-w-2-form</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/finance/llc-operating-agreement</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/finance/cancel-pending-transaction-credit-card</loc>
+    <lastmod>2026-09-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/finance/gross-monthly-income</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paycheck/do-paychecks-expire</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/empeon-ess-hub-pay-stub</loc>
+    <lastmod>2026-09-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/harris-teeter-pay-stub-access</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://alexandercaldwell.com/paystubs/what-does-a-pay-stub-look-like</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
@@ -70,6 +226,12 @@
       <image:loc>https://alexandercaldwell.com/assets/blog/what-does-a-pay-stub-look-like.jpg</image:loc>
       <image:title>What Does a Pay Stub Look Like and What Information Does It Include? — guide by Alexander Caldwell</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/paystub-abbreviations-explained</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/w-2-form/how-to-get-your-w-2-from-a-previous-employer</loc>
@@ -99,6 +261,16 @@
     <image:image>
       <image:loc>https://alexandercaldwell.com/assets/blog/what-happens-if-i-only-file-1-w-2-form.jpg</image:loc>
       <image:title>What Happens If I Only File 1 W-2 Form? — guide by Alexander Caldwell</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/paystubs/how-to-get-a-pay-stub-for-an-auto-loan</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/how-to-get-a-pay-stub-for-an-auto-loan.jpg</image:loc>
+      <image:title>How to Get a Pay Stub for an Auto Loan: Lender Checklist — guide by Alexander Caldwell</image:title>
     </image:image>
   </url>
   <url>
@@ -263,7 +435,7 @@
   </url>
   <url>
     <loc>https://alexandercaldwell.com/glossary</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
