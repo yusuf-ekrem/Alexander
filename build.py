@@ -522,9 +522,22 @@ def esc(text: str) -> str:
     return html.escape(text, quote=True)
 
 
+def canonical_path(path: str) -> str:
+    """The path exactly as the host serves it.
+
+    vercel.json sets cleanUrls with trailingSlash false, so /blog is the served
+    URL and /blog/ only redirects to it. Canonicals, Open Graph URLs, schema @ids
+    and the sitemap all have to use the served form or they point at a redirect.
+    """
+    if path == "/" or not path.startswith("/"):
+        return path
+    base, sep, frag = path.partition("#")
+    return f"{base.rstrip('/') or '/'}{sep}{frag}"
+
+
 def url(path: str) -> str:
-    """Absolute URL for a site-relative path such as '/tax/'."""
-    return SITE_URL + path
+    """Absolute URL for a site-relative path such as '/tax'."""
+    return SITE_URL + canonical_path(path)
 
 
 def strip_tags(markup: str) -> str:
@@ -723,8 +736,21 @@ def howto_ld(url_: str, post: "Post", sections: list[tuple[str, str]]) -> dict |
     }
 
 
+TRAILING_SLASH = re.compile(r'(href|src)="(/[^"\s]+?)/(#[^"]*)?"')
+
+
+def normalize_links(markup: str) -> str:
+    """Drop the trailing slash from internal links so every href matches the
+    canonical URL instead of hitting a redirect."""
+    return TRAILING_SLASH.sub(
+        lambda m: f'{m.group(1)}="{m.group(2)}{m.group(3) or ""}"', markup
+    )
+
+
 def write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.suffix == ".html":
+        content = normalize_links(content)
     path.write_text(content, encoding="utf-8")
 
 
@@ -758,7 +784,7 @@ class Post:
 
     @property
     def path(self) -> str:
-        return f"/{self.category}/{self.slug}/"
+        return f"/{self.category}/{self.slug}"
 
 
 def load_posts() -> list[Post]:
@@ -908,6 +934,10 @@ def page(
     current: str = "",
     og_type: str = "website",
     image: str = "",
+    published: dt.date | None = None,
+    modified: dt.date | None = None,
+    section: str = "",
+    tags: list[str] | None = None,
     jsonld: dict | None = None,
     noindex: bool = False,
     canonical: bool = True,
@@ -917,7 +947,27 @@ def page(
         f"{title} — guide by {AUTHOR_NAME}" if image
         else f"Portrait of {AUTHOR_NAME} with the site name and tagline"
     )
-    robots = '\n  <meta name="robots" content="noindex">' if noindex else ""
+    if noindex:
+        robots = '\n  <meta name="robots" content="noindex, follow">'
+    else:
+        # Explicitly invite indexing and allow full snippets and large previews.
+        directives = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        robots = (
+            f'\n  <meta name="robots" content="{directives}">'
+            f'\n  <meta name="googlebot" content="{directives}">'
+        )
+    article_meta = ""
+    if published:
+        tag_meta = "".join(
+            f'\n  <meta property="article:tag" content="{esc(t)}">' for t in (tags or [])
+        )
+        article_meta = (
+            f'\n  <meta property="article:published_time" content="{published.isoformat()}">'
+            f'\n  <meta property="article:modified_time" content="{(modified or published).isoformat()}">'
+            f'\n  <meta property="article:author" content="{esc(AUTHOR_NAME)}">'
+            + (f'\n  <meta property="article:section" content="{esc(section)}">' if section else "")
+            + tag_meta
+        )
     canon = f'\n  <link rel="canonical" href="{url(path)}">' if canonical else ""
     ld = ""
     if jsonld:
@@ -933,6 +983,7 @@ def page(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(full_title)}</title>
   <meta name="description" content="{esc(description)}">{robots}{canon}
+  <meta name="author" content="{esc(AUTHOR_NAME)}">
   <meta name="google-site-verification" content="{GOOGLE_SITE_VERIFICATION}">
   <link rel="icon" href="{asset_url("/assets/favicon-32.png")}" sizes="32x32" type="image/png">
   <link rel="icon" href="{asset_url("/assets/favicon-192.png")}" sizes="192x192" type="image/png">
@@ -951,6 +1002,7 @@ def page(
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{url(image or OG_IMAGE)}">
   <meta name="twitter:site" content="@alexandercaldw">
+  <meta name="twitter:creator" content="@alexandercaldw">{article_meta}
   <meta name="theme-color" content="#1b2532">{ld}
 </head>
 <body>
@@ -1541,6 +1593,10 @@ def build_post(p: Post, posts: list[Post]) -> str:
         body=body,
         og_type="article",
         image=p.image,
+        published=p.date,
+        modified=p.date,
+        section=p.category_name,
+        tags=[ENTITIES[t][0] for t in topics[:6]],
         jsonld=ld,
     )
 
