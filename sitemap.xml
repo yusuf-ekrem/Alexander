@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://alexandercaldwell.com/</loc>
     <lastmod>2026-09-03</lastmod>
@@ -65,118 +66,204 @@
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-does-a-pay-stub-look-like.jpg</image:loc>
+      <image:title>What Does a Pay Stub Look Like and What Information Does It Include? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/w-2-form/how-to-get-your-w-2-from-a-previous-employer/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/how-to-get-your-w-2-from-a-previous-employer.jpg</image:loc>
+      <image:title>How to Get Your W-2 from a Previous Employer: Full Guide — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/w-2-form/what-happens-if-you-dont-file-a-w-2/</loc>
     <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-happens-if-you-dont-file-a-w-2.jpg</image:loc>
+      <image:title>What Happens If You Don&#x27;t File a W-2? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/w-2-form/what-happens-if-i-only-file-1-w-2-form/</loc>
     <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-happens-if-i-only-file-1-w-2-form.jpg</image:loc>
+      <image:title>What Happens If I Only File 1 W-2 Form? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/1099-forms/what-is-form-1099-nec/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-is-form-1099-nec.jpg</image:loc>
+      <image:title>What Is Form 1099-NEC? 2026 Instructions and Filing Guide — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/1099-forms/what-is-form-1099-misc/</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-is-form-1099-misc.jpg</image:loc>
+      <image:title>What Is Form 1099-MISC? A Complete Guide for 2026 — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/1099-forms/1099-pay-stub-for-contractors/</loc>
     <lastmod>2026-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/1099-pay-stub-for-contractors.jpg</image:loc>
+      <image:title>1099 Pay Stub for Contractors: What It Is and What Records You Need — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/tax/how-much-is-the-child-tax-credit/</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/how-much-is-the-child-tax-credit.jpg</image:loc>
+      <image:title>How Much Is the Child Tax Credit? 2025-2026 Guide — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/tax/change-direct-deposit-information-with-irs/</loc>
     <lastmod>2026-08-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/change-direct-deposit-information-with-irs.jpg</image:loc>
+      <image:title>How Do I Change My Direct Deposit Information With the IRS? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/tax/california-exit-tax-explained/</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/california-exit-tax-explained.jpg</image:loc>
+      <image:title>California&#x27;s &quot;Exit Tax&quot; Explained: What Actually Happens When You Move — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/finance/how-to-show-proof-of-income-if-paid-in-cash/</loc>
     <lastmod>2026-08-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/how-to-show-proof-of-income-if-paid-in-cash.jpg</image:loc>
+      <image:title>How to Show Proof of Income if Paid in Cash: Top Strategies — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/finance/team-motivation-ideas-for-turbulent-times/</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/team-motivation-ideas-for-turbulent-times.jpg</image:loc>
+      <image:title>6 Effective Team Motivation Ideas for Turbulent Times — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/finance/employee-goal-setting-worksheet/</loc>
     <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/employee-goal-setting-worksheet.jpg</image:loc>
+      <image:title>Employee Goal Setting Worksheet: How to Accomplish Your Goals — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paycheck/how-much-tax-is-taken-out-of-a-minors-paycheck/</loc>
     <lastmod>2026-08-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/how-much-tax-is-taken-out-of-a-minors-paycheck.jpg</image:loc>
+      <image:title>How Much Tax Is Taken Out of a Minor&#x27;s Paycheck? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paycheck/why-was-no-federal-income-tax-withheld/</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/why-was-no-federal-income-tax-withheld.jpg</image:loc>
+      <image:title>Why Was No Federal Income Tax Withheld From My Paycheck? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/payroll/best-cheap-payroll-services-2026/</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/best-cheap-payroll-services-2026.jpg</image:loc>
+      <image:title>Best Cheap Payroll Services for Small Businesses in 2026 — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/payroll/what-is-a-payroll-card/</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-is-a-payroll-card.jpg</image:loc>
+      <image:title>What Is a Payroll Card and How Does It Work? — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paystubs/year-to-date-ytd-meaning-and-formula/</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/year-to-date-ytd-meaning-and-formula.jpg</image:loc>
+      <image:title>Year-to-Date (YTD) Meaning, Importance and Formula — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paystubs/how-to-make-a-pay-stub/</loc>
     <lastmod>2026-08-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/how-to-make-a-pay-stub.jpg</image:loc>
+      <image:title>How to Make a Pay Stub: A Step-by-Step Guide (2026) — guide by Alexander Caldwell</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://alexandercaldwell.com/paystubs/what-is-a-pay-stub/</loc>
     <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://alexandercaldwell.com/assets/blog/what-is-a-pay-stub.jpg</image:loc>
+      <image:title>What Is a Pay Stub? Guide to Earnings, Taxes and Deductions — guide by Alexander Caldwell</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://alexandercaldwell.com/glossary/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

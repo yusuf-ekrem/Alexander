@@ -182,6 +182,324 @@ SOCIAL_ICONS = {
     "Pinterest": '<path d="M12 2a10 10 0 0 0-3.6 19.3c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.4 0 .9-.5 2.1-.8 3.3-.2 1 .5 1.8 1.5 1.8 1.8 0 3.1-1.9 3.1-4.6 0-2.4-1.7-4-4.2-4-2.8 0-4.5 2.1-4.5 4.3 0 .9.3 1.8.7 2.3.1.1.1.2.1.3l-.3 1.1c0 .2-.1.2-.3.1-1.2-.6-2-2.4-2-3.8 0-3.1 2.3-6 6.5-6 3.4 0 6.1 2.4 6.1 5.7 0 3.4-2.1 6.1-5.1 6.1-1 0-1.9-.5-2.3-1.1l-.6 2.4c-.2.9-.8 2-1.2 2.6A10 10 0 1 0 12 2Z"/>',
 }
 
+# --------------------------------------------------------------------------- #
+# Semantic layer: the entities this site is about, how they are named in prose,
+# and which article is the canonical answer for each phrase. The glossary, the
+# in-text links and the schema graph are all generated from this one table, so
+# the names an article uses, the terms it links and the entities it declares in
+# JSON-LD always agree.
+# --------------------------------------------------------------------------- #
+
+# slug -> (display name, phrases found in prose, authoritative URL, definition)
+ENTITIES: dict[str, tuple[str, list[str], str, str]] = {
+    "pay-stub": (
+        "Pay stub",
+        ["pay stub", "pay stubs", "wage statement", "payroll statement"],
+        "https://en.wikipedia.org/wiki/Paycheck",
+        "The payroll statement that accompanies a payment and explains how it was "
+        "calculated: pay period, earnings, taxes, deductions, net pay and year-to-date totals.",
+    ),
+    "gross-pay": (
+        "Gross pay",
+        ["gross pay", "gross earnings", "gross wages"],
+        "https://en.wikipedia.org/wiki/Gross_income",
+        "Everything earned in a pay period before taxes and deductions are removed. "
+        "It is the figure every withholding calculation starts from.",
+    ),
+    "net-pay": (
+        "Net pay",
+        ["net pay", "take-home pay"],
+        "https://en.wikipedia.org/wiki/Net_income",
+        "What remains after taxes and deductions are subtracted from gross pay, and "
+        "the amount actually paid to the employee.",
+    ),
+    "year-to-date": (
+        "Year-to-date (YTD)",
+        ["year-to-date", "YTD"],
+        "https://en.wikipedia.org/wiki/Year-to-date",
+        "The running total of a payroll figure from the start of the calendar year "
+        "through the current pay period. YTD totals are what year-end forms are built from.",
+    ),
+    "pay-period": (
+        "Pay period",
+        ["pay period", "pay periods"],
+        "https://en.wikipedia.org/wiki/Payroll",
+        "The span of work dates a payment covers, which is not the same as the pay "
+        "date on which the money is actually issued.",
+    ),
+    "payroll": (
+        "Payroll",
+        ["payroll process", "payroll system"],
+        "https://en.wikipedia.org/wiki/Payroll",
+        "The process of calculating employee pay, withholding and depositing taxes, "
+        "issuing payments and keeping the wage records that support year-end reporting.",
+    ),
+    "withholding": (
+        "Tax withholding",
+        ["federal income tax withholding", "tax withholding", "withholding"],
+        "https://www.irs.gov/payments/tax-withholding",
+        "Income tax an employer deducts from wages and remits on the employee's "
+        "behalf. It is an estimate of the annual bill, not the bill itself.",
+    ),
+    "fica": (
+        "FICA taxes",
+        ["FICA"],
+        "https://en.wikipedia.org/wiki/Federal_Insurance_Contributions_Act",
+        "Social Security and Medicare taxes collected under the Federal Insurance "
+        "Contributions Act. Unlike income tax, the rates are fixed and a Form W-4 cannot change them.",
+    ),
+    "social-security-tax": (
+        "Social Security tax",
+        ["Social Security tax", "Social Security wages"],
+        "https://www.ssa.gov/benefits/retirement/planner/taxes.html",
+        "The 6.2% employee share of Social Security tax, applied to wages up to the "
+        "annual wage base, with the employer paying a matching share.",
+    ),
+    "medicare-tax": (
+        "Medicare tax",
+        ["Medicare tax", "Medicare wages"],
+        "https://www.irs.gov/taxtopics/tc751",
+        "The 1.45% employee share of Medicare tax, applied to all covered wages with "
+        "no cap, plus an additional 0.9% on wages above the statutory threshold.",
+    ),
+    "irs": (
+        "Internal Revenue Service (IRS)",
+        ["Internal Revenue Service", "IRS"],
+        "https://www.irs.gov/",
+        "The federal agency that administers the tax code, publishes the withholding "
+        "tables and receives the information returns employers file.",
+    ),
+    "form-w-2": (
+        "Form W-2",
+        ["Form W-2", "W-2 form", "W-2 forms", "W-2"],
+        "https://www.irs.gov/forms-pubs/about-form-w-2",
+        "The annual Wage and Tax Statement an employer furnishes to each employee and "
+        "files with the Social Security Administration, reporting wages and taxes withheld.",
+    ),
+    "form-w-4": (
+        "Form W-4",
+        ["Form W-4", "W-4"],
+        "https://www.irs.gov/forms-pubs/about-form-w-4",
+        "The Employee's Withholding Certificate. Its entries tell payroll how much "
+        "federal income tax to withhold from each paycheck.",
+    ),
+    "form-w-9": (
+        "Form W-9",
+        ["Form W-9", "W-9"],
+        "https://www.irs.gov/forms-pubs/about-form-w-9",
+        "The form a business collects from a contractor or vendor to obtain the legal "
+        "name and taxpayer identification number needed for information reporting.",
+    ),
+    "form-1099-nec": (
+        "Form 1099-NEC",
+        ["Form 1099-NEC", "1099-NEC"],
+        "https://www.irs.gov/forms-pubs/about-form-1099-nec",
+        "The information return used to report nonemployee compensation paid for "
+        "services in the course of a trade or business.",
+    ),
+    "form-1099-misc": (
+        "Form 1099-MISC",
+        ["Form 1099-MISC", "1099-MISC"],
+        "https://www.irs.gov/forms-pubs/about-form-1099-misc",
+        "The information return for miscellaneous payments such as rent, royalties, "
+        "prizes, medical payments and gross proceeds paid to an attorney.",
+    ),
+    "form-1099-k": (
+        "Form 1099-K",
+        ["Form 1099-K", "1099-K"],
+        "https://www.irs.gov/businesses/understanding-your-form-1099-k",
+        "The return a payment settlement entity files for card and third-party network "
+        "transactions, which is why those payments are not reported on a 1099-NEC by the payer.",
+    ),
+    "form-1040-x": (
+        "Form 1040-X",
+        ["Form 1040-X", "1040-X"],
+        "https://www.irs.gov/forms-pubs/about-form-1040x",
+        "The amended individual income tax return, used to correct a return that has "
+        "already been filed, for example when a W-2 was left out.",
+    ),
+    "form-4852": (
+        "Form 4852",
+        ["Form 4852"],
+        "https://www.irs.gov/forms-pubs/about-form-4852",
+        "The substitute for Form W-2, available in qualifying situations when an "
+        "employer does not provide a W-2 or provides an incorrect one.",
+    ),
+    "form-941": (
+        "Form 941",
+        ["Form 941"],
+        "https://www.irs.gov/forms-pubs/about-form-941",
+        "The quarterly federal return on which an employer reports withheld income tax "
+        "and both shares of Social Security and Medicare tax.",
+    ),
+    "nonemployee-compensation": (
+        "Nonemployee compensation",
+        ["nonemployee compensation"],
+        "https://www.irs.gov/forms-pubs/about-form-1099-nec",
+        "Payments for services performed by someone who is not an employee, reported "
+        "in Box 1a of Form 1099-NEC once the year's threshold is met.",
+    ),
+    "independent-contractor": (
+        "Independent contractor",
+        ["independent contractor", "independent contractors"],
+        "https://www.irs.gov/businesses/small-businesses-self-employed/independent-contractor-defined",
+        "A worker whose relationship with the payer fails the employee control tests, "
+        "and who therefore manages their own taxes and business records.",
+    ),
+    "self-employment-tax": (
+        "Self-employment tax",
+        ["self-employment tax"],
+        "https://www.irs.gov/businesses/small-businesses-self-employed/self-employment-tax-social-security-and-medicare-taxes",
+        "The Social Security and Medicare tax paid by the self-employed, covering both "
+        "the employee and employer shares on net earnings.",
+    ),
+    "estimated-tax": (
+        "Estimated tax",
+        ["estimated tax", "quarterly estimated"],
+        "https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes",
+        "Quarterly payments that take the place of payroll withholding for income that "
+        "has no tax withheld, such as contractor earnings.",
+    ),
+    "backup-withholding": (
+        "Backup withholding",
+        ["backup withholding"],
+        "https://www.irs.gov/businesses/small-businesses-self-employed/backup-withholding",
+        "Withholding a payer must apply, often because a taxpayer identification number "
+        "is missing or incorrect. It can trigger a filing requirement regardless of the payment amount.",
+    ),
+    "direct-deposit": (
+        "Direct deposit",
+        ["direct deposit"],
+        "https://en.wikipedia.org/wiki/Direct_deposit",
+        "Electronic payment of wages or a tax refund straight into a bank account "
+        "identified by its routing and account numbers.",
+    ),
+    "payroll-card": (
+        "Payroll card",
+        ["payroll card", "payroll cards"],
+        "https://www.consumerfinance.gov/consumer-tools/prepaid-cards/payroll-cards/",
+        "A prepaid card an employer loads with wages. It cannot be made the only way "
+        "an employee receives pay, and it carries Regulation E protections.",
+    ),
+    "child-tax-credit": (
+        "Child Tax Credit",
+        ["Child Tax Credit"],
+        "https://www.irs.gov/credits-deductions/individuals/child-tax-credit",
+        "A per-child federal credit that reduces income tax, with a partially "
+        "refundable portion delivered through the Additional Child Tax Credit.",
+    ),
+    "401k": (
+        "401(k)",
+        ["401(k)"],
+        "https://en.wikipedia.org/wiki/401(k)",
+        "An employer retirement plan. Traditional contributions reduce taxable wages "
+        "for income tax but not for Social Security and Medicare; Roth contributions reduce neither.",
+    ),
+    "overtime": (
+        "Overtime",
+        ["overtime"],
+        "https://www.dol.gov/agencies/whd/overtime",
+        "Hours worked beyond the federal weekly threshold, paid at a premium rate. "
+        "Several states add their own daily or weekly rules.",
+    ),
+    "ein": (
+        "Employer Identification Number (EIN)",
+        ["Employer Identification Number", "EIN"],
+        "https://www.irs.gov/businesses/small-businesses-self-employed/get-an-employer-identification-number",
+        "The federal tax identification number a business needs before it can run "
+        "payroll and file employment tax returns.",
+    ),
+    "franchise-tax-board": (
+        "California Franchise Tax Board",
+        ["Franchise Tax Board"],
+        "https://www.ftb.ca.gov/",
+        "California's tax agency, whose residency and sourcing publications decide "
+        "what a former resident still owes the state.",
+    ),
+}
+
+# Phrases that, when they appear in another article's prose, should link to the
+# article that answers them. Specific enough not to hijack ordinary sentences.
+ANCHOR_PHRASES: dict[str, list[str]] = {
+    "how-to-get-your-w-2-from-a-previous-employer": [
+        "W-2 from a previous employer", "missing W-2", "former employer",
+    ],
+    "what-happens-if-you-dont-file-a-w-2": [
+        "omitted W-2", "left off a return", "W-2 income off",
+    ],
+    "what-happens-if-i-only-file-1-w-2-form": [
+        "more than one W-2", "multiple W-2 forms", "second W-2",
+    ],
+    "what-is-form-1099-nec": ["Form 1099-NEC", "1099-NEC"],
+    "what-is-form-1099-misc": ["Form 1099-MISC", "1099-MISC"],
+    "1099-pay-stub-for-contractors": ["contractor payment record", "1099 pay stub"],
+    "how-much-is-the-child-tax-credit": ["Child Tax Credit"],
+    "change-direct-deposit-information-with-irs": [
+        "direct deposit information", "refund direct deposit",
+    ],
+    "california-exit-tax-explained": ["California exit tax", "California-source income"],
+    "how-to-show-proof-of-income-if-paid-in-cash": ["proof of income", "paid in cash"],
+    "team-motivation-ideas-for-turbulent-times": ["team motivated", "team motivation"],
+    "employee-goal-setting-worksheet": ["goal-setting worksheet", "goal setting worksheet"],
+    "how-much-tax-is-taken-out-of-a-minors-paycheck": ["minor's paycheck", "minor employees"],
+    "how-to-make-a-pay-stub": ["make a pay stub", "create a pay stub", "pay stub generator"],
+    "what-is-a-pay-stub": ["what a pay stub is"],
+    "what-does-a-pay-stub-look-like": ["what a pay stub looks like", "anatomy of a pay stub"],
+    "year-to-date-ytd-meaning-and-formula": ["year-to-date", "YTD"],
+    "what-is-a-payroll-card": ["payroll card"],
+    "best-cheap-payroll-services-2026": ["payroll service", "payroll services"],
+    "why-was-no-federal-income-tax-withheld": [
+        "no federal income tax", "zero federal income tax",
+    ],
+}
+
+# Categories that answer adjacent questions, linked to each other as siblings.
+RELATED_CATEGORIES: dict[str, list[str]] = {
+    "paystubs": ["paycheck", "payroll", "w-2-form"],
+    "payroll": ["paystubs", "tax", "paycheck"],
+    "tax": ["w-2-form", "paycheck", "1099-forms"],
+    "finance": ["paycheck", "paystubs", "tax"],
+    "paycheck": ["paystubs", "tax", "payroll"],
+    "w-2-form": ["tax", "paystubs", "1099-forms"],
+    "1099-forms": ["tax", "paystubs", "payroll"],
+}
+
+# The article that is the best answer for an entity. A mention of the entity in
+# any other article links here, which is what turns a pile of posts into a topic
+# cluster with one canonical destination per concept.
+CANONICAL_ARTICLE: dict[str, str] = {
+    "pay-stub": "what-is-a-pay-stub",
+    "gross-pay": "what-is-a-pay-stub",
+    "net-pay": "what-is-a-pay-stub",
+    "pay-period": "what-does-a-pay-stub-look-like",
+    "year-to-date": "year-to-date-ytd-meaning-and-formula",
+    "withholding": "why-was-no-federal-income-tax-withheld",
+    "fica": "why-was-no-federal-income-tax-withheld",
+    "social-security-tax": "how-much-tax-is-taken-out-of-a-minors-paycheck",
+    "medicare-tax": "how-much-tax-is-taken-out-of-a-minors-paycheck",
+    "form-w-2": "how-to-get-your-w-2-from-a-previous-employer",
+    "form-w-4": "why-was-no-federal-income-tax-withheld",
+    "form-w-9": "what-is-form-1099-nec",
+    "form-1099-nec": "what-is-form-1099-nec",
+    "form-1099-misc": "what-is-form-1099-misc",
+    "form-1099-k": "what-is-form-1099-nec",
+    "form-1040-x": "what-happens-if-you-dont-file-a-w-2",
+    "form-4852": "how-to-get-your-w-2-from-a-previous-employer",
+    "nonemployee-compensation": "what-is-form-1099-nec",
+    "independent-contractor": "1099-pay-stub-for-contractors",
+    "self-employment-tax": "1099-pay-stub-for-contractors",
+    "estimated-tax": "1099-pay-stub-for-contractors",
+    "backup-withholding": "what-is-form-1099-nec",
+    "direct-deposit": "change-direct-deposit-information-with-irs",
+    "payroll-card": "what-is-a-payroll-card",
+    "child-tax-credit": "how-much-is-the-child-tax-credit",
+    "overtime": "how-to-make-a-pay-stub",
+    "franchise-tax-board": "california-exit-tax-explained",
+}
+
+MAX_AUTO_LINKS = 8           # contextual links added to one article
+MAX_TOPIC_CHIPS = 8          # glossary terms listed under an article
+
 TODAY = dt.date.today()
 
 
@@ -243,6 +561,166 @@ def add_heading_ids(markup: str) -> tuple[str, list[tuple[str, str]]]:
         return f'<h2 id="{hid}"{m.group(1)}>{text}</h2>'
 
     return re.sub(r"<h2([^>]*)>(.*?)</h2>", repl, markup, flags=re.S), headings
+
+
+SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "h5", "h6", "figcaption", "table"}
+
+
+def _text_nodes(markup: str):
+    """Yield (start, end) spans of text that is safe to link: outside tags, and
+    outside the elements in SKIP_TAGS."""
+    depth: list[str] = []
+    pos = 0
+    while True:
+        lt = markup.find("<", pos)
+        if lt == -1:
+            if pos < len(markup) and not depth:
+                yield pos, len(markup)
+            return
+        if lt > pos and not depth:
+            yield pos, lt
+        gt = markup.find(">", lt)
+        if gt == -1:
+            return
+        tag = markup[lt + 1 : gt].strip()
+        closing = tag.startswith("/")
+        name = tag.lstrip("/").split()[0].lower() if tag.lstrip("/").split() else ""
+        if name in SKIP_TAGS and not tag.endswith("/"):
+            if closing:
+                if depth and depth[-1] == name:
+                    depth.pop()
+            else:
+                depth.append(name)
+        pos = gt + 1
+
+
+def autolink(markup: str, current_slug: str, by_slug: dict[str, "Post"]) -> tuple[str, int]:
+    """Link the first mention of another article's phrase to that article.
+
+    One link per target, never inside a heading or an existing link, and capped
+    so an article reads as prose rather than as a link farm.
+    """
+    candidates: list[tuple[str, str]] = []
+    for slug, phrases in ANCHOR_PHRASES.items():
+        for phrase in phrases:
+            candidates.append((phrase, slug))
+    for entity, slug in CANONICAL_ARTICLE.items():
+        for phrase in ENTITIES[entity][1]:
+            candidates.append((phrase, slug))
+    candidates = [
+        (phrase, slug)
+        for phrase, slug in candidates
+        if slug != current_slug and slug in by_slug
+    ]
+    candidates.sort(key=lambda c: len(c[0]), reverse=True)
+
+    used: set[str] = set()
+    added = 0
+    for phrase, slug in candidates:
+        if added >= MAX_AUTO_LINKS or slug in used:
+            continue
+        pattern = re.compile(rf"(?<![\w-]){re.escape(phrase)}(?![\w-])", re.I)
+        hit = None
+        for start, end in _text_nodes(markup):
+            m = pattern.search(markup, start, end)
+            if m:
+                hit = m
+                break
+        if not hit:
+            continue
+        target = by_slug[slug]
+        link = (
+            f'<a href="{target.path}" title="{esc(target.title)}">{hit.group(0)}</a>'
+        )
+        markup = markup[: hit.start()] + link + markup[hit.end() :]
+        used.add(slug)
+        added += 1
+    return markup, added
+
+
+def entities_in(*texts: str) -> list[str]:
+    """Entity slugs mentioned in the given text, most prominent first."""
+    haystack = " ".join(strip_tags(t) for t in texts)
+    found: list[tuple[int, int, str]] = []
+    for slug, (_name, phrases, _url, _definition) in ENTITIES.items():
+        count = 0
+        first = len(haystack)
+        for phrase in phrases:
+            for m in re.finditer(rf"(?<![\w-]){re.escape(phrase)}(?![\w-])", haystack, re.I):
+                count += 1
+                first = min(first, m.start())
+        if count:
+            found.append((-count, first, slug))
+    found.sort()
+    return [slug for _c, _f, slug in found]
+
+
+def sections_of(markup: str) -> list[tuple[str, str]]:
+    """(heading text, html under it) for every <h2> in an article body."""
+    parts = re.split(r'<h2 id="[^"]*"[^>]*>(.*?)</h2>', markup, flags=re.S)
+    out = []
+    for i in range(1, len(parts), 2):
+        heading = html.unescape(strip_tags(parts[i])).strip()
+        out.append((heading, parts[i + 1]))
+    return out
+
+
+def first_answer(markup: str, limit: int = 420) -> str:
+    """Plain-text answer taken from the paragraphs under a heading."""
+    paragraphs = re.findall(r"<p>(.*?)</p>", markup, flags=re.S)
+    answer = ""
+    for par in paragraphs:
+        text = " ".join(html.unescape(strip_tags(par)).split())
+        if not text:
+            continue
+        answer = f"{answer} {text}".strip()
+        if len(answer) >= limit:
+            break
+    return answer[:600].strip()
+
+
+def faq_ld(url_: str, sections: list[tuple[str, str]]) -> dict | None:
+    """FAQPage built from the question headings an article already uses."""
+    questions = [(h, b) for h, b in sections if h.endswith("?")]
+    if len(questions) < 3:
+        return None
+    return {
+        "@type": "FAQPage",
+        "@id": f"{url_}#faq",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": heading,
+                "acceptedAnswer": {"@type": "Answer", "text": first_answer(body)},
+            }
+            for heading, body in questions
+            if first_answer(body)
+        ],
+    }
+
+
+def howto_ld(url_: str, post: "Post", sections: list[tuple[str, str]]) -> dict | None:
+    """HowTo built from headings written as numbered steps."""
+    steps = [(h, b) for h, b in sections if re.match(r"^Step \d+[:.]", h)]
+    if len(steps) < 3:
+        return None
+    return {
+        "@type": "HowTo",
+        "@id": f"{url_}#howto",
+        "name": post.title,
+        "description": post.description,
+        "totalTime": f"PT{post.minutes}M",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "position": i + 1,
+                "name": re.sub(r"^Step \d+[:.]\s*", "", heading),
+                "text": first_answer(body, 240),
+                "url": f"{url_}#{slugify(heading)}",
+            }
+            for i, (heading, body) in enumerate(steps)
+        ],
+    }
 
 
 def write(path: Path, content: str) -> None:
@@ -383,6 +861,7 @@ def footer() -> str:
             <li><a href="/">Home</a></li>
             <li><a href="/about/">About</a></li>
             <li><a href="/blog/">All articles</a></li>
+            <li><a href="/glossary/">Glossary</a></li>
             <li><a href="/terms/">ToS</a></li>
             <li><a href="/privacy/">Privacy</a></li>
           </ul>
@@ -496,6 +975,7 @@ def person_ld() -> dict:
         "alumniOf": {"@type": "CollegeOrUniversity", "name": "University of California, Berkeley"},
         "worksFor": {"@type": "Organization", "name": "Online Pay Stub"},
         "sameAs": [href for _, href in SOCIAL],
+        "knowsAbout": [entity_ld(slug) for slug in list(ENTITIES)[:14]],
     }
 
 
@@ -509,6 +989,37 @@ def website_ld() -> dict:
         "inLanguage": "en",
         "image": url(OG_IMAGE),
         "publisher": {"@id": url("/#person")},
+    }
+
+
+def entity_ld(slug: str) -> dict:
+    """A DefinedTerm node that points at both the glossary entry and an
+    authoritative external definition, so the entity can be reconciled."""
+    name, _phrases, authority, _definition = ENTITIES[slug]
+    return {
+        "@type": "DefinedTerm",
+        "@id": url(f"/glossary/#{slug}"),
+        "name": name,
+        "inDefinedTermSet": {"@id": url("/glossary/#glossary")},
+        "sameAs": authority,
+    }
+
+
+def blog_ld(posts: list["Post"]) -> dict:
+    return {
+        "@type": "Blog",
+        "@id": url("/#blog"),
+        "url": url("/blog/"),
+        "name": f"{SITE_NAME} — {TAGLINE}",
+        "description": SITE_DESCRIPTION,
+        "inLanguage": "en",
+        "author": {"@id": url("/#person")},
+        "publisher": {"@id": url("/#person")},
+        "isPartOf": {"@id": url("/#website")},
+        "blogPost": [
+            {"@type": "BlogPosting", "@id": url(q.path), "headline": q.title, "url": url(q.path)}
+            for q in posts
+        ],
     }
 
 
@@ -800,12 +1311,59 @@ def build_blog(posts: list[Post]) -> str:
         description="All personal finance, payroll and paycheck articles by Alexander Caldwell.",
         path="/blog/",
         body=body,
-        jsonld=graph(breadcrumb_ld([("Home", "/"), ("Blog", "/blog/")])),
+        jsonld=graph(blog_ld(posts), breadcrumb_ld([("Home", "/"), ("Blog", "/blog/")])),
     )
+
+
+def category_topics(slug: str, mine: list["Post"], limit: int = 5) -> list[str]:
+    """Entities the articles in a category share, so the hub declares the same
+    subject matter its articles do."""
+    tally: dict[str, int] = {}
+    for q in mine:
+        for i, ent in enumerate(entities_in(q.title, q.description, q.body)[:8]):
+            tally[ent] = tally.get(ent, 0) + (8 - i)
+    return [e for e, _ in sorted(tally.items(), key=lambda kv: -kv[1])][:limit]
 
 
 def build_category(slug: str, name: str, desc: str, intro: str, posts: list[Post]) -> str:
     mine = [p for p in posts if p.category == slug]
+
+    # The question headings these articles already answer, linked to the exact
+    # section that answers them.
+    questions: list[tuple[str, str]] = []
+    for q in mine:
+        body, _ = add_heading_ids(q.body)
+        for heading, _section in sections_of(body):
+            if heading.endswith("?"):
+                questions.append((heading, f"{q.path}#{slugify(heading)}"))
+    questions_block = ""
+    if questions:
+        items = "\n          ".join(
+            f'<li><a href="{href}">{esc(text)}</a></li>' for text, href in questions[:10]
+        )
+        questions_block = f"""      <section class="section qa" aria-labelledby="questions-answered">
+        <div class="section-head"><h2 id="questions-answered">Questions this section answers</h2></div>
+        <ul class="qa-list">
+          {items}
+        </ul>
+      </section>
+"""
+
+    siblings_block = ""
+    siblings = [c for c in RELATED_CATEGORIES.get(slug, []) if c in CATEGORY_BY_SLUG]
+    if siblings:
+        tiles = "\n          ".join(
+            f'<a class="sibling" href="/{c}/"><span class="sibling-name">{esc(CATEGORY_BY_SLUG[c][0])}</span>'
+            f'<span class="sibling-desc">{esc(CATEGORY_BY_SLUG[c][1])}</span></a>'
+            for c in siblings
+        )
+        siblings_block = f"""      <section class="section" aria-labelledby="related-topics">
+        <div class="section-head"><h2 id="related-topics">Related topics</h2></div>
+        <div class="sibling-row">
+          {tiles}
+        </div>
+      </section>
+"""
     body = f"""    <div class="container">
 {breadcrumbs([("Home", "/"), (name, f"/{slug}/")])}
       <header class="page-head">
@@ -815,7 +1373,7 @@ def build_category(slug: str, name: str, desc: str, intro: str, posts: list[Post
         <div class="category-intro"><p>{esc(intro)}</p></div>
       </header>
 {post_grid(mine, "h2")}
-    </div>
+{questions_block}{siblings_block}    </div>
 """
     ld = graph(
         {
@@ -825,6 +1383,21 @@ def build_category(slug: str, name: str, desc: str, intro: str, posts: list[Post
             "name": name,
             "description": intro,
             "isPartOf": {"@id": url("/#website")},
+            "about": [entity_ld(t) for t in category_topics(slug, mine)],
+            "mainEntity": {
+                "@type": "ItemList",
+                "itemListOrder": "https://schema.org/ItemListOrderDescending",
+                "numberOfItems": len(mine),
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": i + 1,
+                        "url": url(q.path),
+                        "name": q.title,
+                    }
+                    for i, q in enumerate(mine)
+                ],
+            },
         },
         breadcrumb_ld([("Home", "/"), (name, f"/{slug}/")]),
     )
@@ -839,9 +1412,14 @@ def build_category(slug: str, name: str, desc: str, intro: str, posts: list[Post
 
 
 def build_post(p: Post, posts: list[Post]) -> str:
-    related = [q for q in posts if q.category == p.category and q.path != p.path][:3]
-    if len(related) < 3:
-        related += [q for q in posts if q.category != p.category and q not in related][: 3 - len(related)]
+    by_slug = {q.slug: q for q in posts}
+    topics = entities_in(p.title, p.description, p.body)
+
+    def relevance(q: Post) -> tuple[int, int]:
+        shared = len(set(topics[:8]) & set(entities_in(q.title, q.description, q.body)[:8]))
+        return (-(shared + (3 if q.category == p.category else 0)), -q.date.toordinal())
+
+    related = sorted((q for q in posts if q.path != p.path), key=relevance)[:3]
     crumbs = [("Home", "/"), (p.category_name, f"/{p.category}/"), (p.title, p.path)]
     hero = ""
     if p.image:
@@ -860,6 +1438,8 @@ def build_post(p: Post, posts: list[Post]) -> str:
     </section>
 """
     article_html, headings = add_heading_ids(p.body)
+    article_html, _links = autolink(article_html, p.slug, by_slug)
+    sections = sections_of(article_html)
     toc = ""
     if headings:
         items = "".join(f'<li><a href="#{hid}">{esc(text)}</a></li>' for hid, text in headings)
@@ -875,6 +1455,19 @@ def build_post(p: Post, posts: list[Post]) -> str:
           <p class="summary-title" id="key-takeaways">Key takeaways</p>
           <ul>
             {points}
+          </ul>
+        </aside>
+"""
+    topic_strip = ""
+    if topics:
+        chips = "\n            ".join(
+            f'<li><a href="/glossary/#{slug}">{esc(ENTITIES[slug][0])}</a></li>'
+            for slug in topics[:MAX_TOPIC_CHIPS]
+        )
+        topic_strip = f"""        <aside class="topics" aria-labelledby="topics-covered">
+          <p class="topics-title" id="topics-covered">Terms in this guide</p>
+          <ul class="chip-list">
+            {chips}
           </ul>
         </aside>
 """
@@ -895,7 +1488,7 @@ def build_post(p: Post, posts: list[Post]) -> str:
           </div>
 {hero}        </header>
 {summary}{toc}{article_html}
-      </article>
+{topic_strip}      </article>
 {author_box()}
     </div>
 {keep_reading}
@@ -920,13 +1513,25 @@ def build_post(p: Post, posts: list[Post]) -> str:
                 "url": url("/about/"),
             },
             "publisher": {"@id": url("/#person")},
-            "isPartOf": {"@id": url("/#website")},
+            "isPartOf": {"@id": url("/#blog")},
             "wordCount": len(strip_tags(p.body).split()),
+            "timeRequired": f"PT{p.minutes}M",
+            "isAccessibleForFree": True,
             **({"image": url(p.image)} if p.image else {}),
             "abstract": " ".join(p.summary) if p.summary else p.description,
+            "keywords": ", ".join(ENTITIES[t][0] for t in topics[:10]),
+            **(
+                {"about": [entity_ld(t) for t in topics[:3]]}
+                if topics else {}
+            ),
+            **(
+                {"mentions": [entity_ld(t) for t in topics[3:10]]}
+                if len(topics) > 3 else {}
+            ),
         },
         person_ld(),
         breadcrumb_ld(crumbs),
+        *[n for n in (faq_ld(url(p.path), sections), howto_ld(url(p.path), p, sections)) if n],
     )
     return page(
         title=p.title,
@@ -936,6 +1541,83 @@ def build_post(p: Post, posts: list[Post]) -> str:
         body=body,
         og_type="article",
         image=p.image,
+        jsonld=ld,
+    )
+
+
+def build_glossary(posts: list[Post]) -> str:
+    """One page that defines every entity the site writes about, links each to an
+    authoritative source, and points to the guides that cover it."""
+    coverage: dict[str, list[Post]] = {}
+    for q in posts:
+        for ent in entities_in(q.title, q.description, q.body)[:8]:
+            coverage.setdefault(ent, []).append(q)
+
+    entries = []
+    for slug in sorted(ENTITIES, key=lambda k: ENTITIES[k][0].lower()):
+        name, _phrases, authority, definition = ENTITIES[slug]
+        guides = coverage.get(slug, [])[:3]
+        links = ""
+        if guides:
+            items = " ".join(
+                f'<a href="{g.path}">{esc(g.title)}</a>' for g in guides
+            )
+            links = f'<p class="term-guides"><span>Covered in:</span> {items}</p>'
+        host = authority.split("/")[2].replace("www.", "")
+        entries.append(
+            f"""        <div class="term" id="{slug}">
+          <h2 class="term-name">{esc(name)}</h2>
+          <p class="term-def">{esc(definition)}</p>
+          {links}
+          <p class="term-source"><a href="{authority}" rel="noopener" target="_blank">Reference: {esc(host)}</a></p>
+        </div>"""
+        )
+
+    body = f"""    <div class="container">
+{breadcrumbs([("Home", "/"), ("Glossary", "/glossary/")])}
+      <header class="page-head">
+        <p class="eyebrow">Reference</p>
+        <h1>Payroll and paycheck glossary</h1>
+        <p class="lead">Plain-English definitions of the {len(ENTITIES)} terms used across this site, each linked to an authoritative source and to the guides that explain it in context.</p>
+      </header>
+      <div class="term-list">
+{chr(10).join(entries)}
+      </div>
+    </div>
+"""
+    ld = graph(
+        {
+            "@type": "DefinedTermSet",
+            "@id": url("/glossary/#glossary"),
+            "url": url("/glossary/"),
+            "name": "Payroll and paycheck glossary",
+            "description": "Definitions of the payroll, paycheck and tax-form terms used across alexandercaldwell.com.",
+            "inLanguage": "en",
+            "author": {"@id": url("/#person")},
+            "isPartOf": {"@id": url("/#website")},
+            "hasDefinedTerm": [
+                {
+                    "@type": "DefinedTerm",
+                    "@id": url(f"/glossary/#{slug}"),
+                    "name": ENTITIES[slug][0],
+                    "description": ENTITIES[slug][3],
+                    "sameAs": ENTITIES[slug][2],
+                    "inDefinedTermSet": {"@id": url("/glossary/#glossary")},
+                }
+                for slug in sorted(ENTITIES, key=lambda k: ENTITIES[k][0].lower())
+            ],
+        },
+        person_ld(),
+        breadcrumb_ld([("Home", "/"), ("Glossary", "/glossary/")]),
+    )
+    return page(
+        title="Glossary",
+        description=(
+            "Plain-English definitions of payroll, paycheck, pay stub and tax-form terms, "
+            f"from gross pay and FICA to Form W-2 and Form 1099-NEC, by {AUTHOR_NAME}."
+        ),
+        path="/glossary/",
+        body=body,
         jsonld=ld,
     )
 
@@ -1051,20 +1733,31 @@ def build_404() -> str:
     )
 
 
-def build_sitemap(entries: list[tuple[str, dt.date, str, str]]) -> str:
+def build_sitemap(entries: list[tuple[str, dt.date, str, str]], images: dict[str, tuple[str, str]]) -> str:
     rows = []
     for path, lastmod, freq, prio in entries:
+        image = ""
+        if path in images:
+            loc, caption = images[path]
+            image = (
+                "    <image:image>\n"
+                f"      <image:loc>{url(loc)}</image:loc>\n"
+                f"      <image:title>{esc(caption)}</image:title>\n"
+                "    </image:image>\n"
+            )
         rows.append(
             "  <url>\n"
             f"    <loc>{url(path)}</loc>\n"
             f"    <lastmod>{lastmod.isoformat()}</lastmod>\n"
             f"    <changefreq>{freq}</changefreq>\n"
             f"    <priority>{prio}</priority>\n"
+            f"{image}"
             "  </url>"
         )
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+        '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
         + "\n".join(rows)
         + "\n</urlset>\n"
     )
@@ -1080,7 +1773,7 @@ def build_robots() -> str:
 
 def clean_output() -> None:
     """Remove previously generated directories so deleted posts disappear."""
-    for name in ["about", "blog", "terms", "privacy", *[slug for slug, *_ in CATEGORIES]]:
+    for name in ["about", "blog", "glossary", "terms", "privacy", *[slug for slug, *_ in CATEGORIES]]:
         target = ROOT / name
         if target.is_dir():
             shutil.rmtree(target)
@@ -1107,9 +1800,15 @@ def main() -> None:
         mine = [p.date for p in posts if p.category == slug]
         sitemap.append((f"/{slug}/", max(mine, default=newest), "weekly", "0.7"))
 
+    images: dict[str, tuple[str, str]] = {}
     for p in posts:
         write(ROOT / p.category / p.slug / "index.html", build_post(p, posts))
         sitemap.append((p.path, p.date, "monthly", "0.6"))
+        if p.image:
+            images[p.path] = (p.image, f"{p.title} — guide by {AUTHOR_NAME}")
+
+    write(ROOT / "glossary" / "index.html", build_glossary(posts))
+    sitemap.append(("/glossary/", newest, "monthly", "0.6"))
 
     write(ROOT / "terms" / "index.html", build_terms())
     sitemap.append(("/terms/", LEGAL_UPDATED, "yearly", "0.3"))
@@ -1117,7 +1816,7 @@ def main() -> None:
     sitemap.append(("/privacy/", LEGAL_UPDATED, "yearly", "0.3"))
 
     write(ROOT / "404.html", build_404())
-    write(ROOT / "sitemap.xml", build_sitemap(sitemap))
+    write(ROOT / "sitemap.xml", build_sitemap(sitemap, images))
     write(ROOT / "robots.txt", build_robots())
 
     print(f"Built {len(posts)} posts, {len(CATEGORIES)} categories, {len(sitemap)} URLs.")

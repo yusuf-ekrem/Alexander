@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
-  <link rel="stylesheet" href="/assets/style.css?v=6f1fe08b0e">
+  <link rel="stylesheet" href="/assets/style.css?v=2ae16a65fe">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://alexandercaldwell.com/finance/">
   <meta property="og:title" content="Finance · Alexander Caldwell">
@@ -37,6 +37,60 @@
       "description": "Personal finance advice usually starts from salary; real budgets start from the amount that actually reaches your account. This section takes a payroll-first view of working life: building a budget on net pay, documenting income when you are paid in cash, keeping the records that prove what you earned, and the workplace habits behind steady earnings such as setting goals you can actually review and keeping a team focused when conditions are unstable.",
       "isPartOf": {
         "@id": "https://alexandercaldwell.com/#website"
+      },
+      "about": [
+        {
+          "@type": "DefinedTerm",
+          "@id": "https://alexandercaldwell.com/glossary/#independent-contractor",
+          "name": "Independent contractor",
+          "inDefinedTermSet": {
+            "@id": "https://alexandercaldwell.com/glossary/#glossary"
+          },
+          "sameAs": "https://www.irs.gov/businesses/small-businesses-self-employed/independent-contractor-defined"
+        },
+        {
+          "@type": "DefinedTerm",
+          "@id": "https://alexandercaldwell.com/glossary/#overtime",
+          "name": "Overtime",
+          "inDefinedTermSet": {
+            "@id": "https://alexandercaldwell.com/glossary/#glossary"
+          },
+          "sameAs": "https://www.dol.gov/agencies/whd/overtime"
+        },
+        {
+          "@type": "DefinedTerm",
+          "@id": "https://alexandercaldwell.com/glossary/#withholding",
+          "name": "Tax withholding",
+          "inDefinedTermSet": {
+            "@id": "https://alexandercaldwell.com/glossary/#glossary"
+          },
+          "sameAs": "https://www.irs.gov/payments/tax-withholding"
+        }
+      ],
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListOrder": "https://schema.org/ItemListOrderDescending",
+        "numberOfItems": 3,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://alexandercaldwell.com/finance/how-to-show-proof-of-income-if-paid-in-cash/",
+            "name": "How to Show Proof of Income if Paid in Cash: Top Strategies"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://alexandercaldwell.com/finance/team-motivation-ideas-for-turbulent-times/",
+            "name": "6 Effective Team Motivation Ideas for Turbulent Times"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "https://alexandercaldwell.com/finance/employee-goal-setting-worksheet/",
+            "name": "Employee Goal Setting Worksheet: How to Accomplish Your Goals"
+          }
+        ]
       }
     },
     {
@@ -139,6 +193,20 @@
           </div>
         </article>
       </div>
+      <section class="section qa" aria-labelledby="questions-answered">
+        <div class="section-head"><h2 id="questions-answered">Questions this section answers</h2></div>
+        <ul class="qa-list">
+          <li><a href="/finance/how-to-show-proof-of-income-if-paid-in-cash/#what-if-you-are-an-employee-paid-in-cash">What If You Are an Employee Paid in Cash?</a></li>
+        </ul>
+      </section>
+      <section class="section" aria-labelledby="related-topics">
+        <div class="section-head"><h2 id="related-topics">Related topics</h2></div>
+        <div class="sibling-row">
+          <a class="sibling" href="/paycheck/"><span class="sibling-name">Paycheck</span><span class="sibling-desc">Gross pay, net pay and everything in between.</span></a>
+          <a class="sibling" href="/paystubs/"><span class="sibling-name">Paystubs</span><span class="sibling-desc">How to read, check and keep your pay stubs.</span></a>
+          <a class="sibling" href="/tax/"><span class="sibling-name">Tax</span><span class="sibling-desc">Withholding, filing and the taxes that touch your paycheck.</span></a>
+        </div>
+      </section>
     </div>
 
   </main>
@@ -159,6 +227,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/about/">About</a></li>
             <li><a href="/blog/">All articles</a></li>
+            <li><a href="/glossary/">Glossary</a></li>
             <li><a href="/terms/">ToS</a></li>
             <li><a href="/privacy/">Privacy</a></li>
           </ul>

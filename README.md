@@ -21,6 +21,7 @@ assets/blog/<slug>.jpg            # article cover (1200w) + <slug>-sm.jpg (620w)
 
 index.html            # generated: home page
 about/  blog/         # generated: bio page, all-articles page
+glossary/             # generated: defined terms, one entry per entity
 terms/  privacy/      # generated: legal pages
 paystubs/ payroll/ tax/ finance/ paycheck/ w-2-form/ 1099-forms/
                       # generated: one folder per category, with a sub-folder per article
@@ -58,6 +59,26 @@ git add -A && git commit -m "Add article: ..."
 
 The build regenerates every page, category listing, the sitemap and robots.txt, and removes
 generated folders for posts that no longer exist.
+
+## Semantic layer
+
+`build.py` holds one table of the entities the site is about, `ENTITIES`: display
+name, the phrases that signal it in prose, an authoritative URL and a definition.
+Three things are generated from it, so they never drift apart:
+
+- **/glossary/** — a `DefinedTermSet`, one `DefinedTerm` per entity, each linked to
+  its authority and to the guides that cover it.
+- **Contextual links** — `CANONICAL_ARTICLE` names the best article for each entity
+  and `ANCHOR_PHRASES` adds article-specific phrases. The first mention in any other
+  article is linked to it, once per target, never inside a heading or an existing
+  link, capped at `MAX_AUTO_LINKS`.
+- **Schema** — each article declares `about` (its top entities) and `mentions` (the
+  rest), plus `FAQPage` when it has three or more question headings and `HowTo` when
+  its headings are numbered steps. Category pages declare an `ItemList` of their
+  articles and the entities those articles share.
+
+To cover a new concept, add it to `ENTITIES`; point `CANONICAL_ARTICLE` at the
+article that answers it best once one exists.
 
 ## Site settings
 
