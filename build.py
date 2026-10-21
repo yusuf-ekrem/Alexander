@@ -30,6 +30,7 @@ POSTS_DIR = ROOT / "content" / "posts"
 
 SITE_URL = "https://alexandercaldwell.com"
 SITE_NAME = "Alexander Caldwell"
+HOME_TITLE = "Financial Expert Alexander Caldwell"   # <title> on the home page only
 TAGLINE = "Payroll & personal finance insights"
 SITE_DESCRIPTION = (
     "Plain-English guides on pay stubs, payroll, taxes, paychecks, W-2 and 1099 forms "
@@ -942,7 +943,7 @@ def page(
     noindex: bool = False,
     canonical: bool = True,
 ) -> str:
-    full_title = SITE_NAME if path == "/" else f"{title} · {SITE_NAME}"
+    full_title = HOME_TITLE if path == "/" else f"{title} · {SITE_NAME}"
     image_alt = (
         f"{title} — guide by {AUTHOR_NAME}" if image
         else f"Portrait of {AUTHOR_NAME} with the site name and tagline"
